@@ -1,14 +1,37 @@
+import java.util.ArrayList;
 
 /**
- * Write a description of class Player here.
+ * Class that holds the necessary data for a player in the game.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Greg MacGown
+ * @version 1.0
  */
 public class Player
 {
-    //Starter file
-    
-    //Object that keeps track of an individual player's cards, taxis, 
-    //and other necessary variables
+    public String name;
+    public int taxis;
+    public ArrayList <Card> hand;
+    public ArrayList <Destinations> claimed;
+
+    public Player(String in) {
+        name = in;
+        taxis = 15;
+        //Initialize hand to empty
+        hand = new ArrayList<Card>();
+        //set claimed routes to none
+        claimed = new ArrayList<Destinations>();
+    }
+
+    /**
+     * Getter method used to check number of taxis
+     * @return int number of taxis player has
+     */
+
+    public int getTaxis(){
+        return taxis;
+    }
+
+    public void addToHand(Card c) {
+        hand.add(c);
+    }
 }
