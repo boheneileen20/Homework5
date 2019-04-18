@@ -1,19 +1,29 @@
-
+import javax.swing.*;
+import java.util.*;
 /**
- * Write a description of class GameDriver here.
+ * Class which runs the game with no graphics implementation to begin
  *
  * @author (your name)
  * @version (a version number or a date)
  */
 public class GameDriver
 {
-    //Starter file
-    
-    //Driver class which runs the game, synthesizing the parts into a whole
-    boolean init = false;
-    
+    public boolean lessThanTwo = false; //boolean to check for last turns
+    public boolean init = false;//boolean to make setup simpler
+    public ArrayList <Player> players;
+
+    public GameDriver(int playerNum){
+        JOptionPane jPane = new JOptionPane(); 
+        players = new ArrayList<Player>();
+        for (int i = 1; i <= playerNum; i++) {
+            String name = jPane.showInputDialog("Please enter the player's name");
+            players.add(new Player(name));
+        }
+        init = true;
+    }
+
     /**
-     * Method which draws transportation cards
+     * Method to draw transportation cards
      */
     public void drawTrans() {
         //full implementation to be done later
@@ -30,5 +40,15 @@ public class GameDriver
                 }
             }
         }
+    }
+    
+    
+    /**
+     * Method to draw destination cards
+     */
+    public void drawDest() {
+        //full implementation to be done later
+        
+        //Draw two cards, then allow user to either keep both cards or discard one of them
     }
 }
