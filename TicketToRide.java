@@ -34,7 +34,7 @@ public class TicketToRide extends JPanel implements MouseListener
         addMouseListener( this );
 
         //instantiate instance variable images
-        transportationCardBack = toolkit.getImage("fwdboardandtransport/transportationcardBack.jpg");
+        transportationCardBack = toolkit.getImage("fwdboardandtransport/transportation_card_back.jpg");
     }
 
     /**
@@ -47,11 +47,11 @@ public class TicketToRide extends JPanel implements MouseListener
     {
         super.paintComponent(g);
         //draw board such that there is white space on the right side
-        g.drawImage(boardImage, 0, 0, 550, 800, 0,0, 3337, 6000,this);
+        g.drawImage(boardImage, 0, 0, 550, 800, 0,0, 3337, 5048,this);
         //add pile of transportation cards
         g.setColor(Color.YELLOW);
         g.fillRect(550, 0, 250, 150);
-        g.drawImage(transportationCardBack, 0, 0, 550, 800, 0,0, 505, 770, this);
+        g.drawImage(transportationCardBack, 550, 0, 800, 150, 0,0, 769, 504, this);
         
         
         //add pile of destination cards
