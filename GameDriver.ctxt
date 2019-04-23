@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=GameDriver
+comment0.text=\r\n\ Class\ which\ runs\ the\ game\ with\ no\ graphics\ implementation\ to\ begin\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=playerNum
+comment1.target=GameDriver(int)
+comment2.params=
+comment2.target=void\ drawTrans()
+comment2.text=\r\n\ Method\ to\ draw\ transportation\ cards\r\n
+comment3.params=
+comment3.target=void\ drawDest()
+comment3.text=\r\n\ Method\ to\ draw\ destination\ cards\r\n
+numComments=4

@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Player
+comment0.text=\r\n\ Class\ that\ holds\ the\ necessary\ data\ for\ a\ player\ in\ the\ game.\r\n\r\n\ @author\ Greg\ MacGown\r\n\ @version\ 1.0\r\n
+comment1.params=in
+comment1.target=Player(java.lang.String)
+comment2.params=
+comment2.target=int\ getTaxis()
+comment2.text=\r\n\ Getter\ method\ used\ to\ check\ number\ of\ taxis\r\n\ @return\ int\ number\ of\ taxis\ player\ has\r\n
+comment3.params=c
+comment3.target=void\ addToHand(Card)
+numComments=4
