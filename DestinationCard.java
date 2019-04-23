@@ -52,7 +52,7 @@ public class DestinationCard
      * 
      * @return the card image
      */
-    public Image getImage(){
+    public Image getPicture(){
         return picture;
     }
     
