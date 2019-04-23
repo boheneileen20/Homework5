@@ -1,4 +1,4 @@
-
+import java.awt.*;
 /**
  * Write a description of class TransportationCard here.
  *
@@ -8,9 +8,11 @@
 public class TransportationCard
 {
     private String color;
+    private Image picture;
     
-    public TransportationCard(String color){
+    public TransportationCard(String color, Image picture){
         this.color = color;
+        this.picture = picture;
     }
     
     /**
@@ -20,5 +22,14 @@ public class TransportationCard
      */
     public String getColor(){
         return color;
+    }
+    
+    /**
+     * Returns the picture of the card
+     * 
+     * @return Image that is the picture of the card
+     */
+    public Image getPicture(){
+        return picture;
     }
 }
