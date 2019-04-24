@@ -8,8 +8,9 @@ import java.util.*;
  * Graphic representation of the New York Ticket to Ride Game. This class contains the main method that must be
  * run to play the game. 
  * 
- * //15 taxis per user
- * //44 transport cards
+ * NOTES:
+ * //15 taxis per user (60 total, 15 of each color)
+ * //44 transport cards (8 rainbow taxi)
  * //18 destination cards
  * //if a player has less than 3 taxis, other players get one more turn, and game is over
  * //score 
@@ -45,6 +46,8 @@ public class TicketToRide extends JPanel implements MouseListener
     private int numPlayers;
     //the game driver object
     private GameDriver gd;
+    //list of players in the game
+    private ArrayList<Player> players = new ArrayList<>();
     /**
      * Constructor for objects of class TicketToRide. Sets up the viewing window and instantiates images and array lists.
      * 
@@ -123,7 +126,7 @@ public class TicketToRide extends JPanel implements MouseListener
         TransportationCard rainbow2 = new TransportationCard("RAINBOW", toolkit.getImage("fwdpieces/rainbow_2.jpg"));
         TransportationCard red1 = new TransportationCard("RED", toolkit.getImage("fwdpieces/red_1.jpg"));
         TransportationCard red2 = new TransportationCard("RED", toolkit.getImage("fwdpieces/red_2.jpg"));
-        
+
         //this arraylist holds the horizontal images
         transCards.add(blue1);
         transCards.add(gray1);
@@ -143,13 +146,31 @@ public class TicketToRide extends JPanel implements MouseListener
         transCardsUpright.add(red2);
 
         //shuffle transportation cards and pick five to display
+        //if there are three of more rainbow taxi cards in these five,
+        //re-shuffle
         Collections.shuffle(transCards);
-        for(int i = 0; i<5; i++){
+        boolean shuffledWell = false;
+        while(!shuffledWell){
+            int taxiCount = 0;
+            for(TransportationCard t : transCards){
+                if(t.getColor().equals("RAINBOW")){
+                    taxiCount++;
+                }
+            }
+            if(taxiCount<3){
+                shuffledWell = true;
+            }
+            else{
+                Collections.shuffle(transCards);
+            }
+        }
+        
+        for(int i = 0; i<6; i++){
             displayTransCards.add(transCards.get(i));
         }
 
     }
-    
+
     /**
      * PaintComponent method for JPanel. If the game has not started, the box cover is displayed and the user
      * can click "play game" to begin. If the game has started the game board is shown.
@@ -178,13 +199,14 @@ public class TicketToRide extends JPanel implements MouseListener
             //add pile of transportation cards
             g.setColor(Color.YELLOW);
             g.fillRect(750, 0, 550, 150);
-            g.drawImage(transportationCardBack, 750, 0, 1000, 150, 0,0, 769, 504, this);
+            //g.drawImage(transportationCardBack, 750, 0, 1000, 150, 0,0, 769, 504, this);
 
-            //draw 4 displayed transport cards
-            g.drawImage(displayTransCards.get(0).getPicture(), 750, 150, 1000, 300, 0,0, 769, 504, this);
-            g.drawImage(displayTransCards.get(1).getPicture(), 750, 300, 1000, 450, 0,0, 769, 504, this);
-            g.drawImage(displayTransCards.get(2).getPicture(), 750, 450, 1000, 600, 0,0, 769, 504, this);
-            g.drawImage(displayTransCards.get(3).getPicture(), 750, 600, 1000, 750, 0,0, 769, 504, this);
+            //draw 5 displayed transport cards
+            g.drawImage(displayTransCards.get(0).getPicture(), 750, 0, 1000, 150, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(1).getPicture(), 750, 150, 1000, 300, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(2).getPicture(), 750, 300, 1000, 450, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(3).getPicture(), 750, 450, 1000, 600, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(4).getPicture(), 750, 600, 1000, 750, 0,0, 769, 504, this);
 
             //add pile of destination cards
 
@@ -212,6 +234,26 @@ public class TicketToRide extends JPanel implements MouseListener
         frame.pack();
         frame.setVisible(true);
 
+    }
+
+    /**
+     * Deals the beginning 2 transportation cards to each player. Only to be called in the beginning of the game. 
+     * 
+     */
+    public void dealDest(){
+        //loop over each player, giving them two cards
+        for(Player p : players){
+            //deal index 0 and 1 to player by adding to their hand
+            TransportationCard first = transCards.get(0);
+            TransportationCard second = transCards.get(1);
+            //add to hand
+            p.addToTransHand(first);
+            p.addToTransHand(second);
+            //remove from deck
+            transCards.remove(0);
+            transCards.remove(1);
+
+        }
     }
 
     /**
@@ -272,6 +314,7 @@ public class TicketToRide extends JPanel implements MouseListener
                     //since a valid number of players has been entered, the game can start
                     inGame = true;
                     gd = new GameDriver(numPlayers);
+                    players = gd.getPlayers();
                     repaint();
                 }
                 else{
@@ -291,7 +334,7 @@ public class TicketToRide extends JPanel implements MouseListener
      * @param args command line arguments. 
      */
     public static void main(String[] args) {
-        
+
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -301,5 +344,4 @@ public class TicketToRide extends JPanel implements MouseListener
             });
     }
 
-    
 }

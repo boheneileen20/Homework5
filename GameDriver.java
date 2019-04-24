@@ -61,12 +61,27 @@ public class GameDriver
 
         //Draw two cards, then allow user to either keep both cards or discard one of them
     }
+    
+    /**
+     * Returns the array of players
+     * 
+     * @return the array of players
+     */
+    public ArrayList<Player> getPlayers(){
+        return players;
+    }
+    
 
     public static void main(String[] args){
         //sort the players AL by player age
-
+        
+        //deal starting hand of two transportation cards to each player
+        
+        
+        
         //allow each user to draw destination cards in order
-
+        
+        
         //begin game loop
         //during a player's turn, they choose to either:
         //  1) draw destination cards,
