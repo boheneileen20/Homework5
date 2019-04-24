@@ -1,9 +1,9 @@
 
 /**
- * Enumeration class Destinations - write a description of the enum class here
+ * Enumeration class Destinations - all of the destinations in the game
  *
- * @author (your name here)
- * @version (version number or date here)
+ * @author Eileen Bohen
+ * @version Spring 2019
  */
 public enum Destinations
 {

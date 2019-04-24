@@ -2,17 +2,26 @@ import java.awt.*;
 /**
  * Encapsulates information for transportation cards.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Eileen Bohen
+ * @version Spring 2019
  */
 public class DestinationCard
 {
-    //Starter file
+    //the value on the card
     private int num;
+    //one destination on the card
     private String dest1;
+    //the other destination on the card
     private String dest2;
+    //the picture of the card
     private Image picture;
     
+    /**
+     * Constructor for objects of the DestinationCard class. Initializes instance variables.
+     * 
+     * @param num, the value on the card. dest1, the first destination. dest2, the second destination. picture, 
+     * the image of the card.
+     */
     public DestinationCard(int num, String dest1, String dest2, Image picture){
         this.num = num;
         this.dest1 = dest1;

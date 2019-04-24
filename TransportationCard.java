@@ -1,15 +1,22 @@
 import java.awt.*;
 /**
- * Write a description of class TransportationCard here.
+ * Encapsulates information for a single transportation card
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Eileen Bohen
+ * @version Spring 2019
  */
 public class TransportationCard
 {
+    //the color of the transportation card
     private String color;
+    //the picture of the card
     private Image picture;
     
+    /**
+     * Constructor for TransportationCard objects. Initializes instance variables.
+     * 
+     * @param color, the color of the card. picture, the Image of the card.
+     */
     public TransportationCard(String color, Image picture){
         this.color = color;
         this.picture = picture;

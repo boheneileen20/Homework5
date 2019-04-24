@@ -1,17 +1,27 @@
 import javax.swing.*;
 import java.util.*;
 /**
- * Class which runs the game with no graphics implementation to begin
+ * Class which runs the game with no graphics implementation
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Eileen Bohen
+ * @version Spring 2019
  */
 public class GameDriver
 {
-    public boolean lessThanTwo = false; //boolean to check for last turns
-    public boolean init = false;//boolean to make setup simpler
+     //boolean to check for last turns
+    public boolean lessThanTwo = false;
+    //boolean to make setup simpler
+    public boolean init = false;
+    //list of player objects
     public ArrayList <Player> players;
-
+    
+    /**
+     * Constructor of Game Driver. Asks the user for player names and ages and creates player objects.
+     * 
+     * @param playerNum, the number of players in the game. This is entered by the user and can be between 2 and 4,
+     * inclusive.
+     * 
+     */
     public GameDriver(int playerNum){
         JOptionPane jPane = new JOptionPane(); 
         players = new ArrayList<Player>();
@@ -51,5 +61,9 @@ public class GameDriver
         //full implementation to be done later
         
         //Draw two cards, then allow user to either keep both cards or discard one of them
+    }
+    
+    public static void main(String[] args){
+        
     }
 }

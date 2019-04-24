@@ -5,7 +5,9 @@ import java.awt.event.*;
 import java.util.*;
 
 /**
- * Write a description of class TicketToRide here.
+ * Graphic representation of the New York Ticket to Ride Game. This class contains the main method that must be
+ * run to play the game. 
+ * 
  * //15 taxis per user
  * //44 transport cards
  * //18 destination cards
@@ -16,23 +18,36 @@ import java.util.*;
  */
 public class TicketToRide extends JPanel implements MouseListener
 {
+    //width and height of display
     private int width;
     private int height;
+    //Images of the board,box cover,and back of the transport card
     private Image coverImage;
     private Image boardImage;
     private Image transportationCardBack;
+    //Toolkit used for grabbing Images
     private Toolkit toolkit;
+    //Rectangle that transportation card pile will be placed on
     private Rectangle transportationCardPile = new Rectangle(100,100,100,100);
-    private ArrayList<DestinationCard> destCards = new ArrayList<>();
-    private ArrayList<TransportationCard> transCards = new ArrayList<>();
-    private ArrayList<TransportationCard> transCardsUpright = new ArrayList<>();
-    private ArrayList<TransportationCard> displayTransCards = new ArrayList<>();
+    //Rectangle that the words "play game" will be printed on
     private Rectangle playGame;
+    //array of destination cards that make up the deck
+    private ArrayList<DestinationCard> destCards = new ArrayList<>();
+    //array of transportation cards with horizontal images
+    private ArrayList<TransportationCard> transCards = new ArrayList<>();
+    //array of transportation cards with vertical images, to be used when displaying a player's hand
+    private ArrayList<TransportationCard> transCardsUpright = new ArrayList<>();
+    //array of transportation cards that make up the deck
+    private ArrayList<TransportationCard> displayTransCards = new ArrayList<>();
+    //variable to keep track of whether the game has started
     private boolean inGame;
+    //the number of players in the game
     private int numPlayers;
-    //private ArrayList<Player> players = new ArrayList<>();
+    //the game driver object
+    private GameDriver gd;
     /**
-     * Constructor for objects of class TextTwist
+     * Constructor for objects of class TicketToRide. Sets up the viewing window and instantiates images and array lists.
+     * 
      */
     public TicketToRide() {
         inGame = false;
@@ -132,8 +147,10 @@ public class TicketToRide extends JPanel implements MouseListener
         }
 
     }
+    
     /**
-     * PaintComponent method for JPanel.
+     * PaintComponent method for JPanel. If the game has not started, the box cover is displayed and the user
+     * can click "play game" to begin. If the game has started the game board is shown.
      *
      * @param  g   the Graphics object for this applet
      */
@@ -177,7 +194,7 @@ public class TicketToRide extends JPanel implements MouseListener
     }
 
     /**
-     * Creates the window and GUI
+     * Creates the window and GUI with a label
      *
      */
     public static void createAndShowGUI(){
@@ -236,7 +253,8 @@ public class TicketToRide extends JPanel implements MouseListener
     public void mouseWheelMoved( MouseWheelEvent e ){ }
 
     /**
-     * 
+     * This method handles mouse clicking events. This includes clicking "play game" to start the game, and the
+     * functionality to interact with the board.
      * 
      * @param e   the event the mouse triggers
      * 
@@ -249,7 +267,7 @@ public class TicketToRide extends JPanel implements MouseListener
                 numPlayers = Integer.parseInt(jPane.showInputDialog("Enter number of players (2, 3, or 4)"));
                 if(numPlayers >1 && numPlayers<5){
                     inGame = true;
-                    GameDriver game = new GameDriver(numPlayers);
+                    gd = new GameDriver(numPlayers);
                     repaint();
                 }
                 else{
@@ -269,7 +287,7 @@ public class TicketToRide extends JPanel implements MouseListener
      * @param args command line arguments. 
      */
     public static void main(String[] args) {
-
+        
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -282,5 +300,5 @@ public class TicketToRide extends JPanel implements MouseListener
     //beginning: pick 3 dest keep 1-3
     //turn: pick 3 more dest cards, or take 2 transport cards, unless you get rainbow face up
     //always 4 transport cards face up, replace every time you take
-    //claim route: pay thatamount of transport cards
+    //claim route: pay that amount of transport cards
 }
