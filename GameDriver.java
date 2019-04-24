@@ -16,8 +16,9 @@ public class GameDriver
         JOptionPane jPane = new JOptionPane(); 
         players = new ArrayList<Player>();
         for (int i = 1; i <= playerNum; i++) {
-            String name = jPane.showInputDialog("Please enter the player's name");
-            players.add(new Player(name));
+            String name = jPane.showInputDialog("Please enter the player " + i + "'s name");
+            int age = Integer.parseInt(jPane.showInputDialog("Please enter the player " + i + "'s age"));
+            players.add(new Player(name, age));
         }
         init = true;
     }

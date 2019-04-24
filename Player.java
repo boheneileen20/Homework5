@@ -9,13 +9,15 @@ import java.util.ArrayList;
 public class Player
 {
     public String name;
+    public int age;
     public int taxis;
     public ArrayList <TransportationCard> transHand;
     public ArrayList <DestinationCard> destHand;
     public ArrayList <Destinations> claimed;
 
-    public Player(String in) {
+    public Player(String in, int age) {
         name = in;
+        this.age = age;
         taxis = 15;
         //Initialize hand to empty
         transHand = new ArrayList<TransportationCard>();
