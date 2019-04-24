@@ -25,7 +25,7 @@ public class TicketToRide extends JPanel implements MouseListener
     //Images of the board,box cover,and back of the transport card
     private Image coverImage;
     private Image boardImage;
-    private Image transportationCardBack;
+    private Image destinationCardBack;
     //Toolkit used for grabbing Images
     private Toolkit toolkit;
     //Rectangle that transportation card pile will be placed on
@@ -66,7 +66,7 @@ public class TicketToRide extends JPanel implements MouseListener
         addMouseListener( this );
 
         //instantiate instance variable images
-        transportationCardBack = toolkit.getImage("fwdboardandtransport/transportation_card_back.jpg");
+        destinationCardBack = toolkit.getImage("fwdboardandtransport/destination_card_back.jpg");
 
         //get board cover image
         coverImage = toolkit.getImage("fwdpieces/box_cover.jpg");
@@ -91,6 +91,7 @@ public class TicketToRide extends JPanel implements MouseListener
         DestinationCard timesEast4 = new DestinationCard(4, "TIMES_SQUARE", "EAST_VILLAGE", toolkit.getImage("fwdboardandtransport/times_east_4.jpg")); 
         DestinationCard timesSoho6 = new DestinationCard(6, "TIMES_SQUARE", "SOHO", toolkit.getImage("fwdboardandtransport/times_soho_6.jpg")); 
         DestinationCard UNWall8 = new DestinationCard(8, "UNITED_NATIONS", "WALL_STREET", toolkit.getImage("fwdboardandtransport/UN_wall_8.jpg"));  
+        
 
         destCards.add(centralChelsea5);
         destCards.add(centralChina8);
@@ -211,9 +212,9 @@ public class TicketToRide extends JPanel implements MouseListener
             g.drawImage(displayTransCards.get(2).getPicture(), 750, 266, 1000, 399, 0,0, 769, 504, this);
             g.drawImage(displayTransCards.get(3).getPicture(), 750, 399, 1000, 532, 0,0, 769, 504, this);
             g.drawImage(displayTransCards.get(4).getPicture(), 750, 532, 1000, 665, 0,0, 769, 504, this);
-            g.drawImage(transportationCardBack, 750, 665, 1000, 798,0 ,0, 769, 504, this);
 
             //add pile of destination cards
+            g.drawImage(destinationCardBack, 750, 665, 1000, 798,0 ,0, 769, 504, this);
 
             //add taxis
 
