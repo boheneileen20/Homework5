@@ -123,7 +123,8 @@ public class TicketToRide extends JPanel implements MouseListener
         TransportationCard rainbow2 = new TransportationCard("RAINBOW", toolkit.getImage("fwdpieces/rainbow_2.jpg"));
         TransportationCard red1 = new TransportationCard("RED", toolkit.getImage("fwdpieces/red_1.jpg"));
         TransportationCard red2 = new TransportationCard("RED", toolkit.getImage("fwdpieces/red_2.jpg"));
-
+        
+        //this arraylist holds the horizontal images
         transCards.add(blue1);
         transCards.add(gray1);
         transCards.add(green1);
@@ -132,6 +133,7 @@ public class TicketToRide extends JPanel implements MouseListener
         transCards.add(rainbow1);
         transCards.add(red1);
 
+        //this arraylist holds the vertical images
         transCardsUpright.add(blue2);
         transCardsUpright.add(gray2);
         transCardsUpright.add(green2);
@@ -263,9 +265,11 @@ public class TicketToRide extends JPanel implements MouseListener
         //handle clicking on opening screen
         if(inGame == false){
             if(playGame.contains(e.getPoint())){
+                //ask user to enter the number of players
                 JOptionPane jPane = new JOptionPane("");
                 numPlayers = Integer.parseInt(jPane.showInputDialog("Enter number of players (2, 3, or 4)"));
                 if(numPlayers >1 && numPlayers<5){
+                    //since a valid number of players has been entered, the game can start
                     inGame = true;
                     gd = new GameDriver(numPlayers);
                     repaint();
