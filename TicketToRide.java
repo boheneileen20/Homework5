@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.awt.event.*;
 import java.util.*;
+import java.awt.geom.Ellipse2D;
 
 /**
  * Graphic representation of the New York Ticket to Ride Game. This class contains the main method that must be
@@ -48,6 +49,14 @@ public class TicketToRide extends JPanel implements MouseListener
     private GameDriver gd;
     //list of players in the game
     private ArrayList<Player> players = new ArrayList<>();
+    //rectangles that will be clicked on
+    Rectangle destPile = new Rectangle(0, 630, 200, 90);
+    Rectangle drawPile = new Rectangle(750, 665, 250, 133);
+    Rectangle card1 = new Rectangle(750, 0, 250, 133);
+    Rectangle card2 = new Rectangle(750, 133, 250, 133);
+    Rectangle card3 = new Rectangle(750, 266, 250, 133);
+    Rectangle card4 = new Rectangle(750, 399, 250, 133);
+    Rectangle card5 = new Rectangle(750, 532, 250, 133);
     /**
      * Constructor for objects of class TicketToRide. Sets up the viewing window and instantiates images and array lists.
      * 
@@ -91,7 +100,6 @@ public class TicketToRide extends JPanel implements MouseListener
         DestinationCard timesEast4 = new DestinationCard(4, "TIMES_SQUARE", "EAST_VILLAGE", toolkit.getImage("fwdboardandtransport/times_east_4.jpg")); 
         DestinationCard timesSoho6 = new DestinationCard(6, "TIMES_SQUARE", "SOHO", toolkit.getImage("fwdboardandtransport/times_soho_6.jpg")); 
         DestinationCard UNWall8 = new DestinationCard(8, "UNITED_NATIONS", "WALL_STREET", toolkit.getImage("fwdboardandtransport/UN_wall_8.jpg"));  
-        
 
         destCards.add(centralChelsea5);
         destCards.add(centralChina8);
@@ -165,7 +173,7 @@ public class TicketToRide extends JPanel implements MouseListener
                 Collections.shuffle(transCards);
             }
         }
-        
+
         for(int i = 0; i<6; i++){
             displayTransCards.add(transCards.get(i));
         }
@@ -200,11 +208,11 @@ public class TicketToRide extends JPanel implements MouseListener
             //add pile of transportation cards
             g.setColor(Color.BLACK);
             g.fillRect(750, 0, 250, 133);
-            g.fillRect(750, 133, 250, 13);
+            g.fillRect(750, 133, 250, 133);
             g.fillRect(750, 266, 250, 133);
             g.fillRect(750, 399, 250, 133);
             g.fillRect(750, 532, 250, 133);
-            g.fillRect(750, 665, 250, 798);
+            g.fillRect(750, 665, 250, 133);
 
             //draw 5 displayed transport cards
             g.drawImage(displayTransCards.get(0).getPicture(), 750, 0, 1000, 133, 0,0, 769, 504, this);
@@ -214,12 +222,40 @@ public class TicketToRide extends JPanel implements MouseListener
             g.drawImage(displayTransCards.get(4).getPicture(), 750, 532, 1000, 665, 0,0, 769, 504, this);
 
             //add pile of destination cards
-            g.drawImage(destinationCardBack, 750, 665, 1000, 798,0 ,0, 769, 504, this);
+            g.fillRect(0, 630, 200, 90);
+            g.drawImage(destinationCardBack, 750, 665, 1000, 798, 0, 0, 769, 504, this);
 
             //add taxis
-
+            //g.drawString("Taxis: " + String.valueOf(getCurrentPlayer().getTaxis()), 20, 730);
             //add player scores
+            //g.drawString("Score: " + String.valueOf(getCurrentPlayer().getScore()), 20, 760);
 
+            //add player hand
+            g.drawImage(toolkit.getImage("fwdpieces/blue_1.jpg"), 0, 0, 200, 90, 0,0, 769, 504, this);
+            g.drawImage(toolkit.getImage("fwdpieces/gray_1.jpg"), 0, 90, 200, 180, 0,0, 769, 504, this);
+            g.drawImage(toolkit.getImage("fwdpieces/green_1.jpg"), 0, 180, 200, 270, 0,0, 769, 504, this);
+            g.drawImage(toolkit.getImage("fwdpieces/orange_1.jpg"), 0, 270, 200, 360, 0,0, 769, 504, this);
+            g.drawImage(toolkit.getImage("fwdpieces/pink_1.jpg"), 0, 360, 200, 450, 0,0, 769, 504, this);
+            g.drawImage(toolkit.getImage("fwdpieces/rainbow_1.jpg"), 0, 450, 200, 540, 0,0, 769, 504, this);
+            g.drawImage(toolkit.getImage("fwdpieces/red_1.jpg"), 0, 540, 200, 630, 0,0, 769, 504, this);
+            g.drawImage(destinationCardBack, 0, 630, 200, 720, 0, 0, 769, 504, this);
+            
+            //draw amount of card for each type
+            Ellipse2D.Double circ1 = new Ellipse2D.Double(170, 30, 30, 30);
+            ((Graphics2D)g).fill(circ1);
+            Ellipse2D.Double circ2 = new Ellipse2D.Double(170, 120, 30, 30);
+            ((Graphics2D)g).fill(circ2);
+            Ellipse2D.Double circ3 = new Ellipse2D.Double(170, 210, 30, 30);
+            ((Graphics2D)g).fill(circ3);
+            Ellipse2D.Double circ4 = new Ellipse2D.Double(170, 300, 30, 30);
+            ((Graphics2D)g).fill(circ4);
+            Ellipse2D.Double circ5 = new Ellipse2D.Double(170, 390, 30, 30);
+            ((Graphics2D)g).fill(circ5);
+            Ellipse2D.Double circ6 = new Ellipse2D.Double(170, 480, 30, 30);
+            ((Graphics2D)g).fill(circ6);
+            Ellipse2D.Double circ7 = new Ellipse2D.Double(170, 570, 30, 30);
+            ((Graphics2D)g).fill(circ7);
+            //g.fillCircle(0,0,0,0);
         }
     }
 
@@ -258,7 +294,6 @@ public class TicketToRide extends JPanel implements MouseListener
             //remove from deck
             transCards.remove(0);
             transCards.remove(1);
-
         }
     }
 
@@ -329,7 +364,27 @@ public class TicketToRide extends JPanel implements MouseListener
             }
         }
         else{
-
+            if (destPile.contains(e.getPoint())) {
+                System.out.println("Destination pile clicked");
+            }
+            if (drawPile.contains(e.getPoint())) {
+                System.out.println("Draw pile clicked");
+            }
+            if (card1.contains(e.getPoint())) {
+                System.out.println("Card 1 clicked");
+            }
+            if (card2.contains(e.getPoint())) {
+                System.out.println("Card 2 clicked");
+            }
+            if (card3.contains(e.getPoint())) {
+                System.out.println("Card 3 clicked");
+            }
+            if (card4.contains(e.getPoint())) {
+                System.out.println("Card 4 clicked");
+            }
+            if (card5.contains(e.getPoint())) {
+                System.out.println("Card 5 clicked");
+            }
         }
 
     }
