@@ -10,14 +10,16 @@ public class Player
 {
     public String name;
     public int taxis;
-    public ArrayList <Card> hand;
+    public ArrayList <TransportationCard> transHand;
+    public ArrayList <DestinationCard> destHand;
     public ArrayList <Destinations> claimed;
 
     public Player(String in) {
         name = in;
         taxis = 15;
         //Initialize hand to empty
-        hand = new ArrayList<Card>();
+        transHand = new ArrayList<TransportationCard>();
+        destHand = new ArrayList<DestinationCard>();
         //set claimed routes to none
         claimed = new ArrayList<Destinations>();
     }
@@ -30,8 +32,17 @@ public class Player
     public int getTaxis(){
         return taxis;
     }
-
-    public void addToHand(Card c) {
-        hand.add(c);
+    
+    
+    /**
+     * Methods used to add drawn cards to the player's hand
+     * @param c Card to add to player's hand
+     */
+    public void addToTransHand(TransportationCard c) {
+        transHand.add(c);
+    }
+    
+    public void addToDestHand(DestinationCard c) {
+        destHand.add(c);
     }
 }

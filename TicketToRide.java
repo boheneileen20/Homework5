@@ -125,9 +125,9 @@ public class TicketToRide extends JPanel implements MouseListener
         transCardsUpright.add(rainbow2);
         transCardsUpright.add(red2);
 
-        //shuffle transportation cards and pick four to display
+        //shuffle transportation cards and pick five to display
         Collections.shuffle(transCards);
-        for(int i = 0; i<4; i++){
+        for(int i = 0; i<5; i++){
             displayTransCards.add(transCards.get(i));
         }
 
@@ -246,9 +246,10 @@ public class TicketToRide extends JPanel implements MouseListener
         if(inGame == false){
             if(playGame.contains(e.getPoint())){
                 JOptionPane jPane = new JOptionPane("");
-                numPlayers = Integer.parseInt(jPane.showInputDialog("Enter number of players (1,2,3, or 4)"));
-                if(numPlayers >0 && numPlayers<5){
+                numPlayers = Integer.parseInt(jPane.showInputDialog("Enter number of players (2, 3, or 4)"));
+                if(numPlayers >1 && numPlayers<5){
                     inGame = true;
+                    GameDriver game = new GameDriver(numPlayers);
                     repaint();
                 }
                 else{
