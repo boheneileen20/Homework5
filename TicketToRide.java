@@ -197,16 +197,21 @@ public class TicketToRide extends JPanel implements MouseListener
             //draw board such that there is white space on both sides
             g.drawImage(boardImage, 200, 0, 750, 800, 0,0, 3337, 5048,this);
             //add pile of transportation cards
-            g.setColor(Color.YELLOW);
-            g.fillRect(750, 0, 550, 150);
-            //g.drawImage(transportationCardBack, 750, 0, 1000, 150, 0,0, 769, 504, this);
+            g.setColor(Color.BLACK);
+            g.fillRect(750, 0, 250, 133);
+            g.fillRect(750, 133, 250, 13);
+            g.fillRect(750, 266, 250, 133);
+            g.fillRect(750, 399, 250, 133);
+            g.fillRect(750, 532, 250, 133);
+            g.fillRect(750, 665, 250, 798);
 
             //draw 5 displayed transport cards
-            g.drawImage(displayTransCards.get(0).getPicture(), 750, 0, 1000, 150, 0,0, 769, 504, this);
-            g.drawImage(displayTransCards.get(1).getPicture(), 750, 150, 1000, 300, 0,0, 769, 504, this);
-            g.drawImage(displayTransCards.get(2).getPicture(), 750, 300, 1000, 450, 0,0, 769, 504, this);
-            g.drawImage(displayTransCards.get(3).getPicture(), 750, 450, 1000, 600, 0,0, 769, 504, this);
-            g.drawImage(displayTransCards.get(4).getPicture(), 750, 600, 1000, 750, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(0).getPicture(), 750, 0, 1000, 133, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(1).getPicture(), 750, 133, 1000, 266, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(2).getPicture(), 750, 266, 1000, 399, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(3).getPicture(), 750, 399, 1000, 532, 0,0, 769, 504, this);
+            g.drawImage(displayTransCards.get(4).getPicture(), 750, 532, 1000, 665, 0,0, 769, 504, this);
+            g.drawImage(transportationCardBack, 750, 665, 1000, 798,0 ,0, 769, 504, this);
 
             //add pile of destination cards
 
