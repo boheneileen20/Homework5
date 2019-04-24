@@ -8,13 +8,13 @@ import java.util.*;
  */
 public class GameDriver
 {
-     //boolean to check for last turns
+    //boolean to check for last turns
     public boolean lessThanTwo = false;
     //boolean to make setup simpler
     public boolean init = false;
     //list of player objects
     public ArrayList <Player> players;
-    
+
     /**
      * Constructor of Game Driver. Asks the user for player names and ages and creates player objects.
      * 
@@ -52,18 +52,33 @@ public class GameDriver
             }
         }
     }
-    
-    
+
     /**
-     * Method to draw destination cards
+     * Method to draw destination cards. 
      */
     public void drawDest() {
         //full implementation to be done later
-        
+
         //Draw two cards, then allow user to either keep both cards or discard one of them
     }
-    
+
     public static void main(String[] args){
+        //sort the players AL by player age
+
+        //allow each user to draw destination cards in order
+
+        //begin game loop
+        //during a player's turn, they choose to either:
+        //  1) draw destination cards,
+        //  2) draw transportation cards, or
+        //  3) claim a route
+        //the loop ends when a player has fewer than 3 taxis, and at that point each of the other
+        //players has one more turn and the game is over.
         
+
+        //beginning: pick 3 dest keep 1-3
+        //turn: pick 3 more dest cards, or take 2 transport cards, unless you get rainbow face up
+        //always 4 transport cards face up, replace every time you take
+        //claim route: pay that amount of transport cards
     }
 }

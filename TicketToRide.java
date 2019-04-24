@@ -301,8 +301,5 @@ public class TicketToRide extends JPanel implements MouseListener
             });
     }
 
-    //beginning: pick 3 dest keep 1-3
-    //turn: pick 3 more dest cards, or take 2 transport cards, unless you get rainbow face up
-    //always 4 transport cards face up, replace every time you take
-    //claim route: pay that amount of transport cards
+    
 }
