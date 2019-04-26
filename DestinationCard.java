@@ -64,5 +64,11 @@ public class DestinationCard
     public Image getPicture(){
         return picture;
     }
+
+    public String toString(){
+        String message = dest1 + " to " + dest2 + " for " + num + " points.";
+        return message;
+
+    }
     
 }
