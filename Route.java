@@ -41,8 +41,8 @@ public class Route
         return requirement;
     }
     
-    public static void main(String[] args){
-        
-
+    public String toString(){
+        String result = loc1.getName() + " to " + loc2.getName() + " for " + requirement;
+        return result;
     }
 }
