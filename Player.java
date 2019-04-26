@@ -19,8 +19,8 @@ public class Player
     public ArrayList <TransportationCard> transHand;
     //the array of destination cards that the user has
     public ArrayList <DestinationCard> destHand;
-    //the array of destinations that the player has successfully claimed
-    public ArrayList <Destinations> claimed;
+    //routes the player has claimed
+    public ArrayList<Route>  claimed;
 
     /**
      * Constructor for player objects. Instantiates name and age to the user inputs, taxis to 15, their hands to empty, 
@@ -36,7 +36,7 @@ public class Player
         transHand = new ArrayList<TransportationCard>();
         destHand = new ArrayList<DestinationCard>();
         //set claimed routes to none
-        claimed = new ArrayList<Destinations>();
+        claimed = new ArrayList<Route>();
     }
 
     /**
@@ -55,6 +55,20 @@ public class Player
      */
     public void addToTransHand(TransportationCard c) {
         transHand.add(c);
+    }
+
+    public void removeFromTransHand(String color){
+        boolean found = false;
+        TransportationCard t = null;
+        //loop through until card is found and remove
+        while(!found) {
+            for (int i = 0; i < transHand.size(); i++) {
+                if (transHand.get(i).getColor().equalsIgnoreCase(color)) {
+                    transHand.remove(i);
+                    found = true;
+                }
+            }
+        }
     }
     
     /**
@@ -87,6 +101,48 @@ public class Player
     }
     public String getName(){
         return name;
+    }
+
+    public int getNumColor(String color){
+        int result = 0;
+        for(TransportationCard t: transHand){
+            if(t.getColor().equalsIgnoreCase(color)){
+                result++;
+            }
+        }
+        return result;
+
+    }
+
+    public void addRoute(Route r){
+        claimed.add(r);
+    }
+
+    public ArrayList<Route> getRoutes(){
+        return claimed;
+    }
+
+    public void printRoutes(){
+        System.out.print(name + "'s claimed routes: ");
+        for(Route r: claimed){
+            System.out.print(r.toString() + " ");
+        }
+    }
+
+    public void printStats(){
+        System.out.println(name +"'s stats: ");
+        System.out.println("Taxis: " + taxis);
+        printTransHand();
+        System.out.println();
+        printDestHand();
+        System.out.println();
+        printRoutes();
+        System.out.println();
+    }
+
+    public void deductTaxis(int num){
+        taxis = taxis - num;
+
     }
     
     
