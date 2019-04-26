@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class TTRDriver {
     private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
     /* array of destination cards that make up the deck*/
     private ArrayList<DestinationCard> destCards =  new  ArrayList <  > ();
     /* array of transportation cards with horizontal images*/
@@ -25,6 +26,10 @@ public class TTRDriver {
         this.numPlayers = numPlayers;
 
         toolkit = Toolkit.getDefaultToolkit();
+        //initialize locations
+        initLocations();
+        //initialize routes
+
         //initialize card decks
         readCardImages();
         //shuffle transportation cards
@@ -350,6 +355,67 @@ public class TTRDriver {
             destCards.remove(0);
 
         }
+
+
+    }
+
+    public void initLocations(){
+        Location lincolnCenter = new Location("LINCOLN_CENTER", 308, 31);
+        Location centralPark = new Location("CENTRAL_PARK", 456, 21);
+        Location timesSquare = new Location("TIMES_SQUARE", 392, 159);
+        Location midtownWest = new Location("MIDTOWN_WEST", 283,184);
+        Location unitedNations = new Location("UNITED_NATIONS", 589, 152);
+        Location empireStateBldg = new Location("EMPIRE_STATE_BUILDING", 451, 251);
+        Location chelsea = new Location("CHELSEA", 517, 328);
+        Location gramercyPark = new Location("GRAMERCY_PARK", 517, 328);
+        Location greenwichVillage = new Location("GREENWICH_VILLAGE", 485, 464);
+        Location eastVillage = new Location("EAST_VILLAGE", 642, 459);
+        Location soho = new Location("SOHO", 392, 594);
+        Location lowerEastSide = new Location("LOWER_EAST_SIDE", 623,557);
+        Location chinatown = new Location("CHINATOWN", 526, 616);
+        Location wallStreet = new Location("WALL_STREET", 480, 723);
+        Location brooklyn = new Location("BROOKLYN", 689, 741);
+
+        locations.add(lincolnCenter);
+        locations.add(centralPark);
+        locations.add(timesSquare);
+        locations.add(midtownWest);
+        locations.add(unitedNations);
+        locations.add(empireStateBldg);
+        locations.add(chelsea);
+        locations.add(gramercyPark);
+        locations.add(greenwichVillage);
+        locations.add(eastVillage);
+        locations.add(soho);
+        locations.add(lowerEastSide);
+        locations.add(chinatown);
+        locations.add(wallStreet);
+        locations.add(brooklyn);
+
+    }
+
+    public void initRoutes(){
+        Route lincolnCentral = new Route(locations.get(0), locations.get(1), "orange 2");
+        Route lincolnMidtown = new Route(locations.get(0), locations.get(3), "red 2");
+        Route lincolnTimes = new Route(locations.get(0), locations.get(2), "green 2");
+        Route lincolnTimes2 = new Route(locations.get(0), locations.get(2), "blue 2");
+        Route centralTimes = new Route(locations.get(1), locations.get(2), "black 2");
+        Route centralTimes2 = new Route(locations.get(1), locations.get(2), "red 2");
+        Route centralUN = new Route(locations.get(1), locations.get(4), "pink 3");
+        Route midtownChelsea = new Route(locations.get(3), locations.get(6), "blue 2");
+        Route midtownEmpire = new Route(locations.get(3), locations.get(5), "black 2");
+        Route midtownTimes = new Route(locations.get(3), locations.get(2), "white 1");
+        Route timesUN = new Route(locations.get(2), locations.get(4), "white 2");
+        Route timesEmpire = new Route(locations.get(1), locations.get(5), "orange 1");
+        Route timesEmpire2 = new Route(locations.get(1), locations.get(5), "pink 1");
+        Route unEmpire = new Route(locations.get(4), locations.get(5), "black 2");
+        Route unGramercy = new Route(locations.get(4), locations.get(7), "green 3");
+        Route chelseaEmpire = new Route(locations.get(6), locations.get(5), "white 2");
+        Route chelseaEmpire2 = new Route(locations.get(6), locations.get(5), "white 2");
+        Route chelseaGramercy = new Route(locations.get(6), locations.get(7), "orange 2");
+        Route chelseaGreenwhich = new Route(locations.get(6), locations.get(8), "green 3");
+
+
 
 
     }
