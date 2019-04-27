@@ -2,9 +2,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
  * Class to create and access panels needed for interface
@@ -28,13 +27,23 @@ public class GUI extends JPanel implements MouseListener {
 
     public GUI(){
 
-        driver = new TTRDriver(2);
+        //set up players first
+        int numPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players?"));
+        driver = new TTRDriver(numPlayers);
+
+        //call makePlayer for each player
+        for(int i = 1; i<=numPlayers; i++){
+            String name = JOptionPane.showInputDialog("Enter player " + i + "'s name.");
+            int age = Integer.parseInt(JOptionPane.showInputDialog("Enter player " + i + "'s age."));
+            driver.makePlayer(name, age);
+        }
+
+
+
         /* sets size of window*/
         frame.setPreferredSize( new  Dimension(1000, 800));
 
         frame.setBackground(Color.WHITE);
-       // width = getPreferredSize().width;
-        //height = getPreferredSize().height;
         /* adds functionality of mouse*/
         addMouseListener(this);
 
@@ -83,7 +92,22 @@ public class GUI extends JPanel implements MouseListener {
         frame.getContentPane().add(panel);
         frame.pack();
         frame.setVisible(true);
+
+        //deal dest cards
+        for(Player p: driver.getPlayers()){
+            ArrayList<DestinationCard> choices = driver.drawTwoDest();
+            String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
+                    choices.get(1) + " \n" +
+                    "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
+            driver.dealInitialDestCardsGUI(playerChoice, choices, p);
+        }
+
+
+
+
     }
+
+
 
     //creates right panel, hold face up transport cards and blind draw pile.
     public static JPanel rightPanel(){
@@ -172,12 +196,14 @@ public class GUI extends JPanel implements MouseListener {
         transCardHandPanel.setBackground(Color.WHITE);
         transCardHandPanel.setLayout(new GridLayout(4,2));
 
-        JLabel nameLabel = new JLabel("Name");
+        //label for name
+        JLabel nameLabel = new JLabel(driver.getPlayers().get(driver.getPlayerTurn()).getName());
         nameLabel.setFont(new Font("Calibri",1, 15));
 
         Image blue = driver.getUprightTrans().get(0).getPicture();
         blue = blue.getScaledInstance(100,100, 0);
         JLabel bluePile = new JLabel(new ImageIcon(blue));
+        
 
         Image gray = driver.getUprightTrans().get(1).getPicture();
         gray = gray.getScaledInstance(100,100, 0);
@@ -213,15 +239,27 @@ public class GUI extends JPanel implements MouseListener {
         scorePanel.setBackground(Color.WHITE);
         scorePanel.setLayout(new GridLayout(3,1));
 
-        JLabel taxiLabel = new JLabel("Taxis: #");
+        JLabel taxiLabel = new JLabel("Taxis: " + driver.getPlayers().get(driver.getPlayerTurn()).getTaxis());
         taxiLabel.setFont(new Font("Calibri",1, 15));
         scorePanel.add(taxiLabel);
         scorePanel.setBorder(new LineBorder(Color.BLACK));
 
-        JLabel destinationLabel = new JLabel("Destination Cards: ");
-        destinationLabel.setFont(new Font("Calibri",1, 15));
-        scorePanel.add(destinationLabel);
-        scorePanel.setBorder(new LineBorder(Color.BLACK));
+        JButton seeDestButton = new JButton("See destination cards");
+        scorePanel.add(seeDestButton);
+
+        seeDestButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                String message = "You have these cards:";
+                for(DestinationCard d: driver.getPlayers().get(driver.getPlayerTurn()).getDestHand()){
+                    message = message + " " + d.toString();
+                }
+                JOptionPane.showMessageDialog(frame, message);
+            }
+        });
+
+
 
         JLabel touristLabel = new JLabel("Tourist Attractions: ");
         touristLabel.setFont(new Font("Calibri",1, 15));
@@ -244,6 +282,9 @@ public class GUI extends JPanel implements MouseListener {
 
         return p;
     }
+
+
+
     /*creates panel in center for board*/
     public static JPanel boardPanel(){
 
