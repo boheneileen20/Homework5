@@ -37,7 +37,7 @@ public class TTRDriver {
         //shuffle transportation cards
         shuffleTransportCards();
         //set up players
-        setUpPlayers();
+        //setUpPlayers();
         //deal initial transportation cards
         dealInitialTransCards();
         //place 5 transportation cards face up
@@ -45,22 +45,22 @@ public class TTRDriver {
         //shuffle destination cards
         shuffleDestCards();
         //deal initial destination cards to players
-        dealInitialDestCards();
+        //dealInitialDestCards();
 
 
-        while(!gameOver){
-            players.get(playerTurn).printStats();
-            turn();
-            nextPlayersTurn();
-
-        }
-        System.out.println("Everyone has only one turn left!!!");
-        //after one player has fewer than 3 taxis, each player gets one more turn
-        for(int i = 0; i<numPlayers; i++){
-            players.get(playerTurn).printStats();
-            turn();
-            nextPlayersTurn();
-        }
+//        while(!gameOver){
+//            players.get(playerTurn).printStats();
+//            turn();
+//            nextPlayersTurn();
+//
+//        }
+//        System.out.println("Everyone has only one turn left!!!");
+//        //after one player has fewer than 3 taxis, each player gets one more turn
+//        for(int i = 0; i<numPlayers; i++){
+//            players.get(playerTurn).printStats();
+//            turn();
+//            nextPlayersTurn();
+//        }
 
         //add scoring here
 
@@ -74,6 +74,15 @@ public class TTRDriver {
         else{
             playerTurn = 0;
         }
+    }
+
+    public int getPlayerTurn(){
+        return playerTurn;
+    }
+
+    public void makePlayer(String name, int age){
+        Player p = new Player(name,age);
+        players.add(p);
     }
 
     public void setUpPlayers(){
@@ -136,8 +145,8 @@ public class TTRDriver {
         TransportationCard green2 =  new  TransportationCard("GREEN", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/green_2.jpg"));
         TransportationCard orange1 =  new  TransportationCard("ORANGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/orange_1.jpg"));
         TransportationCard orange2 =  new  TransportationCard("ORANGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/orange_2.jpg"));
-        TransportationCard pink1 =  new  TransportationCard("ORANGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/orange_1.jpg"));
-        TransportationCard pink2 =  new  TransportationCard("ORANGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/orange_2.jpg"));
+        TransportationCard pink1 =  new  TransportationCard("ORANGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/pink_1.jpg"));
+        TransportationCard pink2 =  new  TransportationCard("ORANGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/pink_2.jpg"));
         TransportationCard rainbow1 =  new  TransportationCard("RAINBOW", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/rainbow_1.jpg"));
         TransportationCard rainbow2 =  new  TransportationCard("RAINBOW", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/rainbow_2.jpg"));
         TransportationCard red1 =  new  TransportationCard("RED", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/red_1.jpg"));
@@ -167,6 +176,10 @@ public class TTRDriver {
         transCardsUpright.add(rainbow2);
 
 
+    }
+
+    public ArrayList<TransportationCard> getUprightTrans(){
+        return transCardsUpright;
     }
 
     public void shuffleTransportCards(){
@@ -240,6 +253,41 @@ public class TTRDriver {
 
     public void shuffleDestCards(){
         Collections.shuffle(destCards);
+    }
+
+    public ArrayList<DestinationCard> drawTwoDest(){
+        DestinationCard choice1 = destCards.get(0);
+        DestinationCard choice2 = destCards.get(1);
+        ArrayList<DestinationCard> result = new ArrayList<>();
+        result.add(choice1);
+        result.add(choice2);
+        return result;
+    }
+
+    public void dealInitialDestCardsGUI(String playersChoice, ArrayList<DestinationCard> choices, Player p){
+        if(playersChoice.equals("1")){
+            //add card to hand, remove that card from deck
+            p.addToDestHand(choices.get(0));
+            //remove then re-add discarded card so that it is at the bottom of the deck
+            destCards.remove(1);
+            destCards.add(choices.get(1));
+            //remove chosen card from deck
+            destCards.remove(0);
+        }
+        else if(playersChoice.equals("2")){
+            p.addToDestHand(choices.get(1));
+            //remove chosen card from deck
+            destCards.remove(1);
+            //remove the re-add discarded card
+            destCards.remove(0);
+            destCards.add(choices.get(0));
+        }
+        else if(playersChoice.equals("both")){
+            p.addToDestHand(choices.get(0));
+            p.addToDestHand(choices.get(1));
+            destCards.remove(0);
+            destCards.remove(1);
+        }
     }
 
     public void dealInitialDestCards(){
