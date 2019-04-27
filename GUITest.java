@@ -24,17 +24,17 @@ public class GUITest extends JPanel implements MouseListener {
     //private static Image boardImage;
 
     //center board panel
-     JPanel game;
+    JPanel game;
     //left side panel
     JPanel left;
     //top panel
-     JPanel top;
+    JPanel top;
     //bottom panel
-     JPanel bottom;
+    JPanel bottom;
     //right panel
-     JPanel right;
+    JPanel right;
 
-     boolean turnOver;
+    boolean turnOver;
 
     public GUITest(){
 
@@ -110,254 +110,17 @@ public class GUITest extends JPanel implements MouseListener {
 
                 //handle drawing trans cards
                 if(turnChoice == 1){
-                    String tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
-                        "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
-                    if(tCardChoice.equals("blind")){
-                        TransportationCard t = driver.getTransDeck().get(0);
-                        JOptionPane.showMessageDialog(frame, "You have drawn a " + t.getColor() + " card.");
-                        driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
-                        driver.removeFromTransDeck(0);
+                   drawTrans();
 
-                        //repaint
-                        //background panel
-                        JPanel panel2 = new JPanel();
-                        panel2.setBackground(Color.white);
-                        panel2.setPreferredSize(new Dimension(1000, 800));
-                        panel2.setLayout(new BorderLayout());
+                }
+                //handle drawing dest cards
+                else if(turnChoice ==2){
 
-
-                        //center board panel
-                        game = boardPanel();
-                        //left side panel
-                        left = leftPanel();
-
-                        //top panel
-                        top = topPanel();
-                        //bottom panel
-                        bottom = bottomPanel();
-                        //right panel
-                        right = rightPanel();
-
-                        panel2.add(game, BorderLayout.CENTER);
-                        panel2.add(right, BorderLayout.EAST);
-                        panel2.add(bottom, BorderLayout.SOUTH);
-                        panel2.add(top, BorderLayout.NORTH);
-                        panel2.add(left, BorderLayout.WEST);
-
-                        frame.getContentPane().add(panel2);
-                        frame.validate();
-
-                    }
-
-                    //face draw
-                    else if(tCardChoice.equals("face")){
-                        int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
-                        //add choice to player hand and remove from display, replacing with top card on deck
-                        TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
-                        driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
-
-                        //replace taken card with top card in deck, remove top card from deck
-                        driver.setDisplayTransCards(faceChoice-1, driver.getTransDeck().get(0));
-                        driver.removeFromTransDeck(0);
-
-                        //check that five cards don't contain more than 3 rainbow cards
-                        while(!driver.validVisibleTrans()){
-                            driver.pickDisplayTransCards();
-                        }
-
-                        //if player chose a taxi, return
-                        if(t.getColor().equals("RAINBOW")){
-                            driver.nextPlayersTurn();
-                            Player p = driver.getPlayers().get(driver.getPlayerTurn());
-                            JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
-
-                            //background panel
-                            JPanel panel2 = new JPanel();
-                            panel2.setBackground(Color.white);
-                            panel2.setPreferredSize(new Dimension(1000, 800));
-                            panel2.setLayout(new BorderLayout());
-
-
-                            //center board panel
-                            game = boardPanel();
-                            //left side panel
-                            left = leftPanel();
-
-                            //top panel
-                            top = topPanel();
-                            //bottom panel
-                            bottom = bottomPanel();
-                            //right panel
-                            right = rightPanel();
-
-                            panel2.add(game, BorderLayout.CENTER);
-                            panel2.add(right, BorderLayout.EAST);
-                            panel2.add(bottom, BorderLayout.SOUTH);
-                            panel2.add(top, BorderLayout.NORTH);
-                            panel2.add(left, BorderLayout.WEST);
-
-                            frame.getContentPane().add(panel2);
-                            frame.validate();
-                            return;
-                        }
-
-                        //repaint everything
-                        //background panel
-                        JPanel panel2 = new JPanel();
-                        panel2.setBackground(Color.white);
-                        panel2.setPreferredSize(new Dimension(1000, 800));
-                        panel2.setLayout(new BorderLayout());
-
-
-                        //center board panel
-                        game = boardPanel();
-                        //left side panel
-                        left = leftPanel();
-
-                        //top panel
-                        top = topPanel();
-                        //bottom panel
-                        bottom = bottomPanel();
-                        //right panel
-                        right = rightPanel();
-
-                        panel2.add(game, BorderLayout.CENTER);
-                        panel2.add(right, BorderLayout.EAST);
-                        panel2.add(bottom, BorderLayout.SOUTH);
-                        panel2.add(top, BorderLayout.NORTH);
-                        panel2.add(left, BorderLayout.WEST);
-
-                        frame.getContentPane().add(panel2);
-                        frame.validate();
-                        createAndShowGUI();
-
-
-                    }
-
-                    //repeat for second card
-                    tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
-                            "Enter \"face\" to draw a face card. You may not draw a rainbow taxi card."));
-
-                    if(tCardChoice.equals("blind")){
-                        TransportationCard t = driver.getTransDeck().get(0);
-                        JOptionPane.showMessageDialog(frame, "You have drawn a " + t.getColor() + " card. Your turn is now over.");
-                        driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
-                        driver.removeFromTransDeck(0);
-
-                        //repaint everything
-                        //background panel
-                        JPanel panel2 = new JPanel();
-                        panel2.setBackground(Color.white);
-                        panel2.setPreferredSize(new Dimension(1000, 800));
-                        panel2.setLayout(new BorderLayout());
-
-
-                        //center board panel
-                        game = boardPanel();
-                        //left side panel
-                        left = leftPanel();
-
-                        //top panel
-                        top = topPanel();
-                        //bottom panel
-                        bottom = bottomPanel();
-                        //right panel
-                        right = rightPanel();
-
-                        panel2.add(game, BorderLayout.CENTER);
-                        panel2.add(right, BorderLayout.EAST);
-                        panel2.add(bottom, BorderLayout.SOUTH);
-                        panel2.add(top, BorderLayout.NORTH);
-                        panel2.add(left, BorderLayout.WEST);
-
-                        frame.getContentPane().add(panel2);
-                        frame.validate();
-
-                    }
-
-                    //face draw
-                    else if(tCardChoice.equals("face")){
-                        int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
-                        //add choice to player hand and remove from display, replacing with top card on deck
-                        TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
-                        driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
-
-                        //replace taken card with top card in deck, remove top card from deck
-                        driver.setDisplayTransCards(faceChoice-1, driver.getTransDeck().get(0));
-                        driver.removeFromTransDeck(0);
-
-                        //check that five cards don't contain more than 3 rainbow cards
-                        while(!driver.validVisibleTrans()){
-                            driver.pickDisplayTransCards();
-                        }
-
-                        //if player chose a taxi, return
-                        if(t.getColor().equals("RAINBOW")){
-                            driver.nextPlayersTurn();
-                            Player p = driver.getPlayers().get(driver.getPlayerTurn());
-                            JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
-
-                            //background panel
-                            JPanel panel2 = new JPanel();
-                            panel2.setBackground(Color.white);
-                            panel2.setPreferredSize(new Dimension(1000, 800));
-                            panel2.setLayout(new BorderLayout());
-
-
-                            //center board panel
-                            game = boardPanel();
-                            //left side panel
-                            left = leftPanel();
-
-                            //top panel
-                            top = topPanel();
-                            //bottom panel
-                            bottom = bottomPanel();
-                            //right panel
-                            right = rightPanel();
-
-                            panel2.add(game, BorderLayout.CENTER);
-                            panel2.add(right, BorderLayout.EAST);
-                            panel2.add(bottom, BorderLayout.SOUTH);
-                            panel2.add(top, BorderLayout.NORTH);
-                            panel2.add(left, BorderLayout.WEST);
-
-                            frame.getContentPane().add(panel2);
-                            frame.validate();
-                            createAndShowGUI();
-                        }
-
-                        //repaint everything
-                        //background panel
-                        JPanel panel2 = new JPanel();
-                        panel2.setBackground(Color.white);
-                        panel2.setPreferredSize(new Dimension(1000, 800));
-                        panel2.setLayout(new BorderLayout());
-
-
-                        //center board panel
-                        game = boardPanel();
-                        //left side panel
-                        left = leftPanel();
-
-                        //top panel
-                        top = topPanel();
-                        //bottom panel
-                        bottom = bottomPanel();
-                        //right panel
-                        right = rightPanel();
-
-                        panel2.add(game, BorderLayout.CENTER);
-                        panel2.add(right, BorderLayout.EAST);
-                        panel2.add(bottom, BorderLayout.SOUTH);
-                        panel2.add(top, BorderLayout.NORTH);
-                        panel2.add(left, BorderLayout.WEST);
-
-                        frame.getContentPane().add(panel2);
-                        frame.validate();
-                        createAndShowGUI();
-                    }
-
+                    drawDest();
+                }
+                //handle claiming routes
+                else if(turnChoice ==3){
+                    
                 }
 
 
@@ -415,6 +178,263 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
 
+    public void drawDest(){
+        Player p = driver.getPlayers().get(driver.getPlayerTurn());
+        ArrayList<DestinationCard> choices = driver.drawTwoDest();
+        String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
+                choices.get(1) + " \n" +
+                "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
+        driver.dealInitialDestCardsGUI(playerChoice, choices, p);
+    }
+    public void drawTrans(){
+        String tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
+                "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
+        if(tCardChoice.equals("blind")){
+            TransportationCard t = driver.getTransDeck().get(0);
+            JOptionPane.showMessageDialog(frame, "You have drawn a " + t.getColor() + " card.");
+            driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
+            driver.removeFromTransDeck(0);
+
+            //repaint
+            //background panel
+            JPanel panel2 = new JPanel();
+            panel2.setBackground(Color.white);
+            panel2.setPreferredSize(new Dimension(1000, 800));
+            panel2.setLayout(new BorderLayout());
+
+
+            //center board panel
+            game = boardPanel();
+            //left side panel
+            left = leftPanel();
+
+            //top panel
+            top = topPanel();
+            //bottom panel
+            bottom = bottomPanel();
+            //right panel
+            right = rightPanel();
+
+            panel2.add(game, BorderLayout.CENTER);
+            panel2.add(right, BorderLayout.EAST);
+            panel2.add(bottom, BorderLayout.SOUTH);
+            panel2.add(top, BorderLayout.NORTH);
+            panel2.add(left, BorderLayout.WEST);
+
+            frame.getContentPane().add(panel2);
+            frame.validate();
+
+        }
+
+        //face draw
+        else if(tCardChoice.equals("face")){
+            int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+            //add choice to player hand and remove from display, replacing with top card on deck
+            TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
+            driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
+
+            //replace taken card with top card in deck, remove top card from deck
+            driver.setDisplayTransCards(faceChoice-1, driver.getTransDeck().get(0));
+            driver.removeFromTransDeck(0);
+
+            //check that five cards don't contain more than 3 rainbow cards
+            while(!driver.validVisibleTrans()){
+                driver.pickDisplayTransCards();
+            }
+
+            //if player chose a taxi, return
+            if(t.getColor().equals("RAINBOW")){
+                driver.nextPlayersTurn();
+                Player p = driver.getPlayers().get(driver.getPlayerTurn());
+                JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+
+                //background panel
+                JPanel panel2 = new JPanel();
+                panel2.setBackground(Color.white);
+                panel2.setPreferredSize(new Dimension(1000, 800));
+                panel2.setLayout(new BorderLayout());
+
+
+                //center board panel
+                game = boardPanel();
+                //left side panel
+                left = leftPanel();
+
+                //top panel
+                top = topPanel();
+                //bottom panel
+                bottom = bottomPanel();
+                //right panel
+                right = rightPanel();
+
+                panel2.add(game, BorderLayout.CENTER);
+                panel2.add(right, BorderLayout.EAST);
+                panel2.add(bottom, BorderLayout.SOUTH);
+                panel2.add(top, BorderLayout.NORTH);
+                panel2.add(left, BorderLayout.WEST);
+
+                frame.getContentPane().add(panel2);
+                frame.validate();
+                return;
+            }
+
+            //repaint everything
+            //background panel
+            JPanel panel2 = new JPanel();
+            panel2.setBackground(Color.white);
+            panel2.setPreferredSize(new Dimension(1000, 800));
+            panel2.setLayout(new BorderLayout());
+
+
+            //center board panel
+            game = boardPanel();
+            //left side panel
+            left = leftPanel();
+
+            //top panel
+            top = topPanel();
+            //bottom panel
+            bottom = bottomPanel();
+            //right panel
+            right = rightPanel();
+
+            panel2.add(game, BorderLayout.CENTER);
+            panel2.add(right, BorderLayout.EAST);
+            panel2.add(bottom, BorderLayout.SOUTH);
+            panel2.add(top, BorderLayout.NORTH);
+            panel2.add(left, BorderLayout.WEST);
+
+            frame.getContentPane().add(panel2);
+            frame.validate();
+            createAndShowGUI();
+
+
+        }
+
+        //repeat for second card
+        tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
+                "Enter \"face\" to draw a face card. You may not draw a rainbow taxi card."));
+
+        if(tCardChoice.equals("blind")){
+            TransportationCard t = driver.getTransDeck().get(0);
+            JOptionPane.showMessageDialog(frame, "You have drawn a " + t.getColor() + " card. Your turn is now over.");
+            driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
+            driver.removeFromTransDeck(0);
+
+            //repaint everything
+            //background panel
+            JPanel panel2 = new JPanel();
+            panel2.setBackground(Color.white);
+            panel2.setPreferredSize(new Dimension(1000, 800));
+            panel2.setLayout(new BorderLayout());
+
+
+            //center board panel
+            game = boardPanel();
+            //left side panel
+            left = leftPanel();
+
+            //top panel
+            top = topPanel();
+            //bottom panel
+            bottom = bottomPanel();
+            //right panel
+            right = rightPanel();
+
+            panel2.add(game, BorderLayout.CENTER);
+            panel2.add(right, BorderLayout.EAST);
+            panel2.add(bottom, BorderLayout.SOUTH);
+            panel2.add(top, BorderLayout.NORTH);
+            panel2.add(left, BorderLayout.WEST);
+
+            frame.getContentPane().add(panel2);
+            frame.validate();
+
+        }
+
+        //face draw
+        else if(tCardChoice.equals("face")){
+            int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+            //add choice to player hand and remove from display, replacing with top card on deck
+            TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
+            driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
+
+            //replace taken card with top card in deck, remove top card from deck
+            driver.setDisplayTransCards(faceChoice-1, driver.getTransDeck().get(0));
+            driver.removeFromTransDeck(0);
+
+            //check that five cards don't contain more than 3 rainbow cards
+            while(!driver.validVisibleTrans()){
+                driver.pickDisplayTransCards();
+            }
+
+            //if player chose a taxi, return
+            if(t.getColor().equals("RAINBOW")){
+                driver.nextPlayersTurn();
+                Player p = driver.getPlayers().get(driver.getPlayerTurn());
+                JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+
+                //background panel
+                JPanel panel2 = new JPanel();
+                panel2.setBackground(Color.white);
+                panel2.setPreferredSize(new Dimension(1000, 800));
+                panel2.setLayout(new BorderLayout());
+
+
+                //center board panel
+                game = boardPanel();
+                //left side panel
+                left = leftPanel();
+
+                //top panel
+                top = topPanel();
+                //bottom panel
+                bottom = bottomPanel();
+                //right panel
+                right = rightPanel();
+
+                panel2.add(game, BorderLayout.CENTER);
+                panel2.add(right, BorderLayout.EAST);
+                panel2.add(bottom, BorderLayout.SOUTH);
+                panel2.add(top, BorderLayout.NORTH);
+                panel2.add(left, BorderLayout.WEST);
+
+                frame.getContentPane().add(panel2);
+                frame.validate();
+                createAndShowGUI();
+            }
+
+            //repaint everything
+            //background panel
+            JPanel panel2 = new JPanel();
+            panel2.setBackground(Color.white);
+            panel2.setPreferredSize(new Dimension(1000, 800));
+            panel2.setLayout(new BorderLayout());
+
+
+            //center board panel
+            game = boardPanel();
+            //left side panel
+            left = leftPanel();
+
+            //top panel
+            top = topPanel();
+            //bottom panel
+            bottom = bottomPanel();
+            //right panel
+            right = rightPanel();
+
+            panel2.add(game, BorderLayout.CENTER);
+            panel2.add(right, BorderLayout.EAST);
+            panel2.add(bottom, BorderLayout.SOUTH);
+            panel2.add(top, BorderLayout.NORTH);
+            panel2.add(left, BorderLayout.WEST);
+
+            frame.getContentPane().add(panel2);
+            frame.validate();
+            createAndShowGUI();
+        }
+    }
 
     //creates right panel, hold face up transport cards and blind draw pile.
     public JPanel rightPanel(){
