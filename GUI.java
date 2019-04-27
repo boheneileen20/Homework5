@@ -8,11 +8,9 @@ import java.util.ArrayList;
 /**
  * Class to create and access panels needed for interface
  */
-public class GUI extends JPanel implements MouseListener {
+public class GUITest extends JPanel implements MouseListener {
     /* Create and set up the window.*/
-    private static JFrame frame =  new  JFrame("Ticket To Ride NY");
-    //board panel
-    private static JPanel gameBoardPanel;
+    private JFrame frame =  new  JFrame("Ticket To Ride NY");
 
     /* width and height of display*/
     private int width;
@@ -22,14 +20,28 @@ public class GUI extends JPanel implements MouseListener {
     private Image destinationCardBack;
     /* Toolkit used for grabbing Images*/
     private static Toolkit toolkit = Toolkit.getDefaultToolkit();;
-    private static TTRDriver driver;
+    private TTRDriver driver;
     //private static Image boardImage;
 
-    public GUI(){
+    //center board panel
+     JPanel game;
+    //left side panel
+    JPanel left;
+    //top panel
+     JPanel top;
+    //bottom panel
+     JPanel bottom;
+    //right panel
+     JPanel right;
+
+     boolean turnOver;
+
+    public GUITest(){
 
         //set up players first
         int numPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players?"));
         driver = new TTRDriver(numPlayers);
+
 
         //call makePlayer for each player
         for(int i = 1; i<=numPlayers; i++){
@@ -39,6 +51,9 @@ public class GUI extends JPanel implements MouseListener {
         }
 
 
+        //deal initial trans cards
+        driver.dealInitialTransCards();
+
 
         /* sets size of window*/
         frame.setPreferredSize( new  Dimension(1000, 800));
@@ -47,24 +62,32 @@ public class GUI extends JPanel implements MouseListener {
         /* adds functionality of mouse*/
         addMouseListener(this);
 
-        //get board panel
-        gameBoardPanel = boardPanel();
+        //deal dest cards
+        for(Player p: driver.getPlayers()){
+            ArrayList<DestinationCard> choices = driver.drawTwoDest();
+            String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
+                    choices.get(1) + " \n" +
+                    "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
+            driver.dealInitialDestCardsGUI(playerChoice, choices, p);
+        }
+        JFrame frame = new JFrame("GUITest");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+
 
 
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
     }
 
     /**
      * Creates the window and GUI with a label
      */
-    static public void createAndShowGUI()
+    public void createAndShowGUI()
     {
-        GUI thegui = new GUI();
-        JFrame frame = new JFrame("GUITest");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
         //background panel
         JPanel panel = new JPanel();
@@ -73,15 +96,60 @@ public class GUI extends JPanel implements MouseListener {
         panel.setLayout(new BorderLayout());
 
         //center board panel
-        JPanel game = boardPanel();
+        game = boardPanel();
         //left side panel
-        JPanel left = leftPanel();
+        left = leftPanel();
         //top panel
-        JPanel top = topPanel();
+        top = topPanel();
+        JButton startTurnButton = new JButton("Start Turn");
+        top.add(startTurnButton);
+
+        startTurnButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                //startTurn = true;
+                int turnChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "enter 1 to draw trans cards, 2 for dest, 3 to claim route"));
+                turnOver = true;
+
+                driver.nextPlayersTurn();
+                Player p = driver.getPlayers().get(driver.getPlayerTurn());
+                JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+
+                //background panel
+                JPanel panel2 = new JPanel();
+                panel2.setBackground(Color.white);
+                panel2.setPreferredSize(new Dimension(1000, 800));
+                panel2.setLayout(new BorderLayout());
+
+
+                //center board panel
+                game = boardPanel();
+                //left side panel
+                left = leftPanel();
+
+                //top panel
+                top = topPanel();
+                //bottom panel
+                bottom = bottomPanel();
+                //right panel
+                right = rightPanel();
+
+                panel2.add(game, BorderLayout.CENTER);
+                panel2.add(right, BorderLayout.EAST);
+                panel2.add(bottom, BorderLayout.SOUTH);
+                panel2.add(top, BorderLayout.NORTH);
+                panel2.add(left, BorderLayout.WEST);
+
+                frame.getContentPane().add(panel2);
+                frame.validate();
+                createAndShowGUI();
+            }
+        });
         //bottom panel
-        JPanel bottom = bottomPanel();
+        bottom = bottomPanel();
         //right panel
-        JPanel right = rightPanel();
+        right = rightPanel();
 
         panel.add(game, BorderLayout.CENTER);
         panel.add(right, BorderLayout.EAST);
@@ -93,16 +161,6 @@ public class GUI extends JPanel implements MouseListener {
         frame.pack();
         frame.setVisible(true);
 
-        //deal dest cards
-        for(Player p: driver.getPlayers()){
-            ArrayList<DestinationCard> choices = driver.drawTwoDest();
-            String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
-                    choices.get(1) + " \n" +
-                    "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
-            driver.dealInitialDestCardsGUI(playerChoice, choices, p);
-        }
-
-
 
 
     }
@@ -110,7 +168,7 @@ public class GUI extends JPanel implements MouseListener {
 
 
     //creates right panel, hold face up transport cards and blind draw pile.
-    public static JPanel rightPanel(){
+    public JPanel rightPanel(){
         JPanel p = new JPanel();
         p.setSize(new Dimension(100, 800));
         p.setBackground(Color.BLUE);
@@ -151,12 +209,12 @@ public class GUI extends JPanel implements MouseListener {
         return p;
     }
     //creates bottom panel
-    public static JPanel bottomPanel(){
+    public JPanel bottomPanel(){
         JPanel p = new JPanel();
         p.setSize(new Dimension(1000, 100));
         p.setBackground(Color.RED);
         JPanel panel = new JPanel();
-        JLabel jLabel = new JLabel("This will give show score components (taxis, routes claimed)");
+        JLabel jLabel = new JLabel("Something might go here");
         jLabel.setFont(new Font("Calibri",1, 15));
         panel.add(jLabel);
         panel.setBorder(new LineBorder(Color.BLACK));
@@ -166,15 +224,17 @@ public class GUI extends JPanel implements MouseListener {
     }
 
     //creates top panel
-    public static JPanel topPanel(){
+    public JPanel topPanel(){
         JPanel p = new JPanel();
         p.setSize(new Dimension(1000, 100));
         p.setBackground(Color.RED);
         JPanel panel = new JPanel();
-        JLabel jLabel = new JLabel("This will give some instruction on who's turn it is");
+        JLabel jLabel = new JLabel("It is " + driver.getPlayers().get(driver.getPlayerTurn()).getName() + "'s turn.");
         jLabel.setFont(new Font("Calibri",1, 15));
         panel.add(jLabel);
         panel.setBorder(new LineBorder(Color.BLACK));
+
+
 
         p.add(panel);
         return p;
@@ -185,49 +245,81 @@ public class GUI extends JPanel implements MouseListener {
             3)destination hand
         also pile of destination cards
      */
-    public static JPanel leftPanel(){
+    public JPanel leftPanel(){
         JPanel p = new JPanel();
         p.setSize(new Dimension(200, 800));
         p.setBackground(Color.BLUE);
-        p.setLayout(new GridLayout(3,1));
+        p.setLayout(new GridLayout(5,1));
 
         JPanel transCardHandPanel = new JPanel();
         transCardHandPanel.setSize(new Dimension(200, 500));
         transCardHandPanel.setBackground(Color.WHITE);
-        transCardHandPanel.setLayout(new GridLayout(4,2));
+        transCardHandPanel.setLayout(new GridLayout(8,2));
 
         //label for name
-        JLabel nameLabel = new JLabel(driver.getPlayers().get(driver.getPlayerTurn()).getName());
+        JLabel nameLabel = new JLabel(driver.getPlayers().get(driver.getPlayerTurn()).getName() + "'s");
         nameLabel.setFont(new Font("Calibri",1, 15));
 
         Image blue = driver.getUprightTrans().get(0).getPicture();
         blue = blue.getScaledInstance(100,100, 0);
         JLabel bluePile = new JLabel(new ImageIcon(blue));
-        
+
+        //blank space
+        JLabel blankLabel = new JLabel("cards");
+        blankLabel.setFont(new Font("Calibri",1, 15));
+
+        //label for num blue cards
+        JLabel blueLabel = new JLabel("Blues: " + driver.getPlayers().get(driver.getPlayerTurn()).getNumColor("blue"));
+        blueLabel.setFont(new Font("Calibri",1, 15));
+
 
         Image gray = driver.getUprightTrans().get(1).getPicture();
         gray = gray.getScaledInstance(100,100, 0);
         JLabel grayPile = new JLabel(new ImageIcon(gray));
 
+        //label for num gray cards
+        JLabel grayLabel = new JLabel("Grays: " + driver.getPlayers().get(driver.getPlayerTurn()).getNumColor("gray"));
+        grayLabel.setFont(new Font("Calibri",1, 15));
+
         Image green = driver.getUprightTrans().get(2).getPicture();
         green = green.getScaledInstance(100,100, 0);
         JLabel greenPile = new JLabel(new ImageIcon(green));
+
+        //label for num green cards
+        JLabel greenLabel = new JLabel("Greens: " + driver.getPlayers().get(driver.getPlayerTurn()).getNumColor("green"));
+        greenLabel.setFont(new Font("Calibri",1, 15));
 
         Image orange = driver.getUprightTrans().get(3).getPicture();
         orange = orange.getScaledInstance(100,100, 0);
         JLabel orangePile = new JLabel(new ImageIcon(orange));
 
+        //label for num orange cards
+        JLabel orangeLabel = new JLabel("Oranges: " + driver.getPlayers().get(driver.getPlayerTurn()).getNumColor("orange"));
+        orangeLabel.setFont(new Font("Calibri",1, 15));
+
         Image pink = driver.getUprightTrans().get(4).getPicture();
         pink = pink.getScaledInstance(100,100, 0);
         JLabel pinkPile = new JLabel(new ImageIcon(pink));
+
+        //label for num pink cards
+        JLabel pinkLabel = new JLabel("Pinks: " + driver.getPlayers().get(driver.getPlayerTurn()).getNumColor("pink"));
+        pinkLabel.setFont(new Font("Calibri",1, 15));
 
         Image red = driver.getUprightTrans().get(5).getPicture();
         red = red.getScaledInstance(100,100, 0);
         JLabel redPile = new JLabel(new ImageIcon(red));
 
+        //label for num red cards
+        JLabel redLabel = new JLabel("Reds: " + driver.getPlayers().get(driver.getPlayerTurn()).getNumColor("red"));
+        redLabel.setFont(new Font("Calibri",1, 15));
+
         Image rainbow = driver.getUprightTrans().get(6).getPicture();
         rainbow = rainbow.getScaledInstance(100,100, 0);
         JLabel rainbowPile = new JLabel(new ImageIcon(rainbow));
+
+        //label for num rainbow cards
+        JLabel rainbowLabel = new JLabel("Rainbows: " + driver.getPlayers().get(driver.getPlayerTurn()).getNumColor("Rainbow"));
+        rainbowLabel.setFont(new Font("Calibri",1, 15));
 
         Image destDraw = toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/destination_card_back.jpg");
         destDraw = destDraw.getScaledInstance(200,100, 0);
@@ -269,12 +361,21 @@ public class GUI extends JPanel implements MouseListener {
 
         transCardHandPanel.add(nameLabel);
         transCardHandPanel.add(bluePile);
+        transCardHandPanel.add(blankLabel);
+        transCardHandPanel.add(blueLabel);
         transCardHandPanel.add(grayPile);
         transCardHandPanel.add(greenPile);
+        transCardHandPanel.add(grayLabel);
+        transCardHandPanel.add(greenLabel);
         transCardHandPanel.add(orangePile);
         transCardHandPanel.add(pinkPile);
+        transCardHandPanel.add(orangeLabel);
+        transCardHandPanel.add(pinkLabel);
+
         transCardHandPanel.add(redPile);
         transCardHandPanel.add(rainbowPile);
+        transCardHandPanel.add(redLabel);
+        transCardHandPanel.add(rainbowLabel);
         p.add(transCardHandPanel);
         p.add(scorePanel);
         p.add(destDrawPile);
@@ -286,7 +387,7 @@ public class GUI extends JPanel implements MouseListener {
 
 
     /*creates panel in center for board*/
-    public static JPanel boardPanel(){
+    public  JPanel boardPanel(){
 
         JPanel p = new JPanel();
         p.setSize(new Dimension(600,600));
@@ -361,10 +462,11 @@ public class GUI extends JPanel implements MouseListener {
      */
     static public void main(String[] args)
     {
+        GUITest t = new GUITest();
         /* Schedule a job for the event-dispatching thread: creating and showing this application's GUI. Unsupported feature in Stride : anonymous class*/
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                t.createAndShowGUI();
             }
         });
     }
