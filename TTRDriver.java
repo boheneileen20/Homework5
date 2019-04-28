@@ -16,6 +16,9 @@ public class TTRDriver {
     private ArrayList<TransportationCard> transCardsUpright =  new  ArrayList <  > ();
     /* array of transportation cards that make up the deck*/
     private ArrayList<TransportationCard> displayTransCards =  new  ArrayList <  > ();
+    /* array of transportation cards that have been discarded*/
+    private ArrayList<TransportationCard> discardedTransCards = new ArrayList<>();
+    
     /* Toolkit used for grabbing Images*/
     private Toolkit toolkit;
     private int numPlayers;
@@ -37,7 +40,7 @@ public class TTRDriver {
         //shuffle transportation cards
         shuffleTransportCards();
         //set up players
-        //setUpPlayers();
+        setUpPlayers();
         //deal initial transportation cards
         dealInitialTransCards();
         //place 5 transportation cards face up
@@ -45,28 +48,25 @@ public class TTRDriver {
         //shuffle destination cards
         shuffleDestCards();
         //deal initial destination cards to players
-        //dealInitialDestCards();
+        dealInitialDestCards();
 
+        while(!gameOver){
+            players.get(playerTurn).printStats();
+            turn();
+            nextPlayersTurn();
 
-//        while(!gameOver){
-//            players.get(playerTurn).printStats();
-//            turn();
-//            nextPlayersTurn();
-//
-//        }
-//        System.out.println("Everyone has only one turn left!!!");
-//        //after one player has fewer than 3 taxis, each player gets one more turn
-//        for(int i = 0; i<numPlayers; i++){
-//            players.get(playerTurn).printStats();
-//            turn();
-//            nextPlayersTurn();
-//        }
+        }
+        System.out.println("Everyone has only one turn left!!!");
+        //after one player has fewer than 3 taxis, each player gets one more turn
+        for(int i = 0; i<numPlayers; i++){
+            players.get(playerTurn).printStats();
+            turn();
+            nextPlayersTurn();
+        }
 
         //add scoring here
 
-
     }
-
     public void nextPlayersTurn(){
         if(playerTurn<numPlayers-1){
             playerTurn = playerTurn +1;
@@ -152,7 +152,7 @@ public class TTRDriver {
         TransportationCard red1 =  new  TransportationCard("RED", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/red_1.jpg"));
         TransportationCard red2 =  new  TransportationCard("RED", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/red_2.jpg"));
         /* this arraylist holds the horizontal images*/
-        //there are 8 of each of the color cards
+        //there are 6 of each of the color cards
         for(int i = 0; i<6; i++) {
             transCards.add(blue1);
             transCards.add(gray1);
@@ -161,7 +161,7 @@ public class TTRDriver {
             transCards.add(pink1);
             transCards.add(red1);
         }
-        //add the 6 rainbow cards
+        //add the 8 rainbow cards
         for(int i = 0; i<8; i++) {
             transCards.add(rainbow1);
         }
@@ -175,9 +175,7 @@ public class TTRDriver {
         transCardsUpright.add(red2);
         transCardsUpright.add(rainbow2);
 
-
     }
-
     public ArrayList<TransportationCard> getUprightTrans(){
         return transCardsUpright;
     }
@@ -293,7 +291,8 @@ public class TTRDriver {
     public void dealInitialDestCards(){
         Scanner s = new Scanner(System.in);
         for(Player p: players){
-            System.out.println("You may pick one or both of these cards: ");
+            String name = p.getName();
+            System.out.println(name +", you may pick one or both of these cards: ");
             DestinationCard choice1 = destCards.get(0);
             DestinationCard choice2 = destCards.get(1);
             System.out.println("Choice 1: " + choice1.toString());
@@ -332,9 +331,13 @@ public class TTRDriver {
         Scanner s = new Scanner(System.in);
         System.out.println("It is " + players.get(playerTurn).getName() + "'s turn.");
 
-
         boolean finishedTurn = false;
         while(!finishedTurn) {
+            System.out.println("Face up transportation cards: ");
+            for(TransportationCard t: getDisplayTransCards()){
+                System.out.print(t.getColor() + " ");
+            }
+            System.out.println();
             System.out.println("Enter 1 to draw transportation cards, 2 to draw destination cards, or 3 to claim a route");
             int turnChoice = s.nextInt();
 
@@ -353,7 +356,6 @@ public class TTRDriver {
         }
 
     }
-
     public void drawTransCards(){
         //player may make a blind draw or draw from the displayed cards
         //if the player takes a face up rainbow taxi card, they may not take another card that turn
@@ -397,7 +399,6 @@ public class TTRDriver {
             }
         }
 
-
         //repeat for second card
         System.out.println("Enter \"blind\" to draw from the top of the transportation deck");
         System.out.println("Enter \"face\" to draw a face up card. You may not draw a rainbow taxi card");
@@ -440,7 +441,6 @@ public class TTRDriver {
             while(!validVisibleTrans()){
                 pickDisplayTransCards();
             }
-
 
         }
     }
@@ -492,16 +492,13 @@ public class TTRDriver {
 
         }
 
-
     }
-
     public void printAvailableRoutes(){
         System.out.println("These routes are available: ");
         for(int i = 1; i<= routes.size(); i++){
             System.out.println(i + ": " + routes.get(i-1).toString());
         }
     }
-
 
     public boolean claimRoute(){
         boolean canClaim = true;
@@ -547,6 +544,9 @@ public class TTRDriver {
                     }
                     System.out.println("You have successfully acquired the route! Your turn is over.");
                     players.get(playerTurn).addRoute(desired);
+                    players.get(playerTurn).claimRouteScore(taxisRequired);
+                    //remove route from available
+                    routes.remove(desired);
                     return true;
                 }
             }
@@ -572,6 +572,8 @@ public class TTRDriver {
                         //remove those cards from hand and give route
                         for(int i = 0; i<requiredMatchCards; i++) {
                             players.get(playerTurn).removeFromTransHand(colorToPayWith);
+                            //discardedTransCard.add(TransportationCard t = new TransportationCard
+                            
                         }
                         for(int i = 0; i<choice; i++) {
                             players.get(playerTurn).removeFromTransHand("RAINBOW");
@@ -583,6 +585,9 @@ public class TTRDriver {
                         }
                         System.out.println("You have successfully claimed the route! Your turn is over.");
                         players.get(playerTurn).addRoute(desired);
+                        players.get(playerTurn).claimRouteScore(taxisRequired);
+                        //remove route from available
+                        routes.remove(desired);
                         return true;
                     }
                 }
@@ -607,10 +612,12 @@ public class TTRDriver {
                     }
                     System.out.println("You have successfully claimed the route! Your turn is over.");
                     players.get(playerTurn).addRoute(desired);
+                    players.get(playerTurn).claimRouteScore(taxisRequired);
+                    //remove route from available
+                    routes.remove(desired);
                     return true;
                 }
             }
-
 
 
         }
@@ -660,8 +667,6 @@ public class TTRDriver {
                 players.get(playerTurn).removeFromTransHand(routeColor);
             }
 
-            //DO CARDS GET PUT BACK IN THE DECK???
-
             //add route to players possession
             //deduct taxis
             players.get(playerTurn).deductTaxis(taxisRequired);
@@ -670,30 +675,32 @@ public class TTRDriver {
             }
             System.out.println("You have successfully claimed a route! Your turn is now over.");
             players.get(playerTurn).addRoute(desired);
+            players.get(playerTurn).claimRouteScore(taxisRequired);
+            //remove route from available
+            routes.remove(desired);
+            
             return true;
         }
         return canClaim;
 
-
-        }
-
+    }
 
     public void initLocations(){
-        Location lincolnCenter = new Location("LINCOLN_CENTER", 308, 31);
-        Location centralPark = new Location("CENTRAL_PARK", 456, 21);
-        Location timesSquare = new Location("TIMES_SQUARE", 392, 159);
-        Location midtownWest = new Location("MIDTOWN_WEST", 283,184);
-        Location unitedNations = new Location("UNITED_NATIONS", 589, 152);
-        Location empireStateBldg = new Location("EMPIRE_STATE_BUILDING", 451, 251);
-        Location chelsea = new Location("CHELSEA", 517, 328);
-        Location gramercyPark = new Location("GRAMERCY_PARK", 517, 328);
-        Location greenwichVillage = new Location("GREENWICH_VILLAGE", 485, 464);
-        Location eastVillage = new Location("EAST_VILLAGE", 642, 459);
-        Location soho = new Location("SOHO", 392, 594);
-        Location lowerEastSide = new Location("LOWER_EAST_SIDE", 623,557);
-        Location chinatown = new Location("CHINATOWN", 526, 616);
-        Location wallStreet = new Location("WALL_STREET", 480, 723);
-        Location brooklyn = new Location("BROOKLYN", 689, 741);
+        Location lincolnCenter = new Location("LINCOLN_CENTER", 308, 31, false);
+        Location centralPark = new Location("CENTRAL_PARK", 456, 21, true);
+        Location timesSquare = new Location("TIMES_SQUARE", 392, 159, true);
+        Location midtownWest = new Location("MIDTOWN_WEST", 283,184, false);
+        Location unitedNations = new Location("UNITED_NATIONS", 589, 152, true);
+        Location empireStateBldg = new Location("EMPIRE_STATE_BUILDING", 451, 251, true);
+        Location chelsea = new Location("CHELSEA", 517, 328, true);
+        Location gramercyPark = new Location("GRAMERCY_PARK", 517, 328, false);
+        Location greenwichVillage = new Location("GREENWICH_VILLAGE", 485, 464, true);
+        Location eastVillage = new Location("EAST_VILLAGE", 642, 459, false);
+        Location soho = new Location("SOHO", 392, 594, false);
+        Location lowerEastSide = new Location("LOWER_EAST_SIDE", 623,557, false);
+        Location chinatown = new Location("CHINATOWN", 526, 616, true);
+        Location wallStreet = new Location("WALL_STREET", 480, 723, true);
+        Location brooklyn = new Location("BROOKLYN", 689, 741, true);
 
         locations.add(lincolnCenter);
         locations.add(centralPark);
@@ -799,9 +806,7 @@ public class TTRDriver {
         routes.add(wallBrooklyn2);
 
 
-
     }
-
 
     public static void main(String[] args) {
         System.out.println("Enter the number of players");
