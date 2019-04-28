@@ -15,8 +15,6 @@ public class Player
     public int age;
     //the number of taxis that the player has (15 to begin with)
     public int taxis;
-    //score counter init to 0
-    private int score = 0;
     //the array of transportation cards that the user has
     public ArrayList <TransportationCard> transHand;
     //the array of destination cards that the user has
@@ -134,7 +132,6 @@ public class Player
     public void printStats(){
         System.out.println(name +"'s stats: ");
         System.out.println("Taxis: " + taxis);
-        System.out.println("Score: " + score + " (routes only)");
         printTransHand();
         System.out.println();
         printDestHand();
@@ -144,22 +141,11 @@ public class Player
     }
 
     public void deductTaxis(int num){
-        taxis = taxis - num;
+        taxis = taxis - num; }
 
-    }
+
+        public ArrayList<DestinationCard> getDestHand(){
+            return destHand;
+        }
     
-    public void claimRouteScore(int routeLength) {
-        if (routeLength ==1) score++;
-        if (routeLength ==2) score += 2;
-        if (routeLength ==3) score += 4;
-        if (routeLength ==4) score += 7;
-    }
-    
-    public void addScore(int points) {
-        score += points;
-    }
-    
-    public int getScore() {
-        return score;
-    }
 }
