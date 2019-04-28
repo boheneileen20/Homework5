@@ -45,4 +45,11 @@ public class Route
         String result = loc1.getName() + " to " + loc2.getName() + " for " + requirement;
         return result;
     }
+    public Location getLoc1(){
+        return loc1;
+    }
+
+    public Location getLoc2(){
+        return loc2;
+    }
 }
