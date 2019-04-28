@@ -14,75 +14,75 @@ public class DestinationCard
     /**
      * one destination on the card
      */
-    private String dest1;
+    private String d1;
     /**
      * the other destination on the card
      */
-    private String dest2;
+    private String d2;
     /**
      * the picture of the card
      */
     private Image picture;
     /**
-     * Constructor for objects of the DestinationCard class. Initializes instance variables.
+     * Constructor for initializing instance variables.
      * 
-     * @param int num, the value on the card.
-     * @param String dest1, the first destination.
-     * @param String dest2, the second destination.
-     * @param Image picture, the image of the card.
+     * @param num The value on the card.
+     * @param d1 The first destination.
+     * @param d2 The second destination.
+     * @param picture The image of the card.
      */
-    public DestinationCard(int num, String dest1, String dest2, Image picture){
+    public DestinationCard(int num, String d1, String d2, Image pic){
         this.num = num;
-        this.dest1 = dest1;
-        this.dest2 = dest2;
-        this.picture = picture;
+        this.d1 = d1;
+        this.d2 = d2;
+        this.picture = pic;
     }
 
     /**
-     * Returns the number of the card
+     * Returns the number of the card.
      * 
-     * @return the number on the card
+     * @return The number on the card.
      */
     public int getNum(){
         return num;
     }
 
     /**
-     * Returns the first destination
+     * Returns the first destination.
      * 
-     * @return the first destination
+     * @return The first destination.
      */
     public String getDest1(){
-        return dest1;
+        return d1;
     }
 
     /**
-     * Returns the second destination
+     * Returns the second destination.
      * 
-     * @return the second destination
+     * @return The second destination.
      */
     public String getDest2(){
-        return dest2;
+        return d2;
     }
 
     /**
-     * Returns the card image
+     * Returns the card image.
      * 
-     * @return the card image
+     * @return The card image.
      */
     public Image getPicture(){
         return picture;
     }
 
     /**
-     * String of the desination card
+     * String of the desination card.
      * 
-     * @return String message, the information of the destination card
+     * @return Information on the destination card.
      */
     public String toString(){
-        String message = dest1 + " to " + dest2 + " for " + num + " points.";
+        String message = d1 + " to " + d2 + 
+        " for " + num + " points.";
         return message;
 
     }
-
 }

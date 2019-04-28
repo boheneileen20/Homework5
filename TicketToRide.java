@@ -6,7 +6,7 @@ import java.util.*;
 import java.awt.geom.Ellipse2D;
 
 /**
- * Graphic version of the New York Ticket to Ride Game and contains the main method to start.
+ * Graphic version of the New York Ticket to Ride Game.
  * 
  * <!--
  * NOTES:
@@ -22,99 +22,99 @@ import java.awt.geom.Ellipse2D;
 public class TicketToRide extends JPanel implements MouseListener
 { 
     /**
-     * width of display
+     * The width of display.
      */
     private int width;
     /**
-     * height of display
+     * The height of display.
      */
     private int height;
     /**
-     * Image of front of transport card
+     * Image of front of transport card.
      */
     private Image coverImage;
     /**
-     * Image of game board
+     * Image of game board.
      */
     private Image boardImage;
     /**
-     * Image of back of transport card
+     * Image of back of transport card.
      */
     private Image destinationCardBack;
     /**
-     * Toolkit used for grabbing Images
+     * Toolkit used for grabbing Images.
      */
     private Toolkit toolkit;
     /**
-     * Rectangle that transportation card pile will be placed on
+     * The transportation card pile.
      */
     private Rectangle transportationCardPile = new Rectangle(100,100,100,100);
     /**
-     * Rectangle that the words "play game" will be printed on
+     * Where "play game" will be printed on.
      */
     private Rectangle playGame;
     /**
-     * array of destination cards that make up the deck
+     * The destination cards that make up the deck.
      */
     private ArrayList<DestinationCard> destCards = new ArrayList<>();
     /**
-     * array of transportation cards with horizontal images
+     * The transportation cards with horizontal images.
      */
     private ArrayList<TransportationCard> transCards = new ArrayList<>();
     /**
-     * array of transportation cards with vertical images, to be used when displaying a player's hand
+     * The transportation cards for displaying a player's hand
      */
     private ArrayList<TransportationCard> transCardsUpright = new ArrayList<>();
     /**
-     * array of transportation cards that make up the deck
+     * The transportation cards that make up the deck.
      */
     private ArrayList<TransportationCard> displayTransCards = new ArrayList<>();
     /**
-     * variable to keep track of whether the game has started
+     * Keeps track of whether the game has started.
      */
     private boolean inGame;
     /**
-     * the number of players in the game
+     * The number of players in the game.
      */
     private int numPlayers;
     /**
-     * the game driver object
+     * The game driver object.
      */
     private GameDriver gd;
     /**
-     * list of players in the game
+     * List of players in the game.
      */
     private ArrayList<Player> players = new ArrayList<>();
     /**
-     * rectangles for desination cards
+     * The desination cards.
      */
     Rectangle destPile = new Rectangle(0, 630, 200, 90);
     /**
-     * rectangles for transporation cards
+     * The transporation cards.
      */
     Rectangle drawPile = new Rectangle(750, 665, 250, 133);
     /**
-     * rectangles for first transporation card on table
+     * The first transporation card on table.
      */
     Rectangle card1 = new Rectangle(750, 0, 250, 133);
     /**
-     * rectangles for second transporation card on table
+     * The second transporation card on table.
      */
     Rectangle card2 = new Rectangle(750, 133, 250, 133);
     /**
-     * rectangles for third transporation card on table
+     * The third transporation card on table.
      */
     Rectangle card3 = new Rectangle(750, 266, 250, 133);
     /**
-     * rectangles for fourth transporation card on table
+     * The fourth transporation card on table.
      */
     Rectangle card4 = new Rectangle(750, 399, 250, 133);
     /**
-     * rectangles for fifth transporation card on table
+     * The fifth transporation card on table.
      */
     Rectangle card5 = new Rectangle(750, 532, 250, 133);
     /**
-     * Constructor for objects of class TicketToRide to set up the viewing window and instantiates images and array lists.
+     * Sets up the viewing window, instantiates images, array lists.
      * 
      */
     public TicketToRide() {
@@ -176,7 +176,7 @@ public class TicketToRide extends JPanel implements MouseListener
         destCards.add(timesSoho6);
         destCards.add(UNWall8);
 
-        //read in transportation card images and save them in an arraylist
+        //read in transportation card images for arraylist
         TransportationCard blue1 = new TransportationCard("BLUE", toolkit.getImage("fwdpieces/blue_1.jpg"));
         TransportationCard blue2 = new TransportationCard("BLUE", toolkit.getImage("fwdpieces/blue_2.jpg"));
         TransportationCard gray1 = new TransportationCard("GRAY", toolkit.getImage("fwdpieces/gray_1.jpg"));
@@ -210,9 +210,7 @@ public class TicketToRide extends JPanel implements MouseListener
         transCardsUpright.add(rainbow2);
         transCardsUpright.add(red2);
 
-        //shuffle transportation cards and pick five to display
-        //if there are three of more rainbow taxi cards in these five,
-        //re-shuffle
+        //shuffle transportation cards and dispay five
         Collections.shuffle(transCards);
         boolean shuffledWell = false;
         while(!shuffledWell){
@@ -222,10 +220,12 @@ public class TicketToRide extends JPanel implements MouseListener
                     taxiCount++;
                 }
             }
+            //if three or more rainbow taxi cards of five,
             if(taxiCount<3){
                 shuffledWell = true;
             }
             else{
+                //re-shuffle
                 Collections.shuffle(transCards);
             }
         }
@@ -237,9 +237,9 @@ public class TicketToRide extends JPanel implements MouseListener
     }
 
     /**
-     * The cover image is displayed with a button "play game" to begin, otherwise the game has started.
+     * The cover is displayed with a button to begin.
      *
-     * @param  g,  the Graphics object for this applet
+     * @param g The Graphics object for this applet.
      */
     @Override
     public void paintComponent(Graphics g)
@@ -258,7 +258,7 @@ public class TicketToRide extends JPanel implements MouseListener
         }
 
         else{
-            //draw board such that there is white space on both sides
+            //draw board for white space on both sides
             g.drawImage(boardImage, 200, 0, 750, 800, 0,0, 3337, 5048,this);
             //add pile of transportation cards
             g.setColor(Color.BLACK);
@@ -334,13 +334,13 @@ public class TicketToRide extends JPanel implements MouseListener
     }
 
     /**
-     * Deals the beginning 2 transportation cards to each player. Called once at the beginning of the game. 
+     * Deals the 2 transportation cards to each player. 
      * 
      */
     public void dealDest(){
         //loop over each player, giving them two cards
         for(Player p : players){
-            //deal index 0 and 1 to player by adding to their hand
+            //deal 2 cards to player adding to their hand
             TransportationCard first = transCards.get(0);
             TransportationCard second = transCards.get(1);
             //add to hand
@@ -353,15 +353,15 @@ public class TicketToRide extends JPanel implements MouseListener
     }
 
     /**
-     * This method makes sure the mouse does nothing when the mouse enters the panel.
+     * The mouse does nothing when entering the panel.
      * 
-     * @param  MouseEvent e, the event the mouse triggers
+     * @param e the event the mouse triggers
      * 
      */
     public void mouseEntered( MouseEvent e ) { }
 
     /**
-     * This method makes sure the mouse does nothing when the mouse exits the panel.
+     * The mouse does nothing when exiting the panel.
      * 
      * @param MouseEvent e, the event the mouse triggers
      * 
@@ -369,33 +369,33 @@ public class TicketToRide extends JPanel implements MouseListener
     public void mouseExited( MouseEvent e ) { }
 
     /**
-     * This method makes sure the mouse does nothing when the mouse is pressed down.
+     * The mouse does nothing when pressed down.
      * 
-     * @param MouseEvent e, the event the mouse triggers
+     * @param e the event the mouse triggers
      * 
      */
     public void mousePressed( MouseEvent e ) { }
 
     /**
-     * This method makes sure the mouse does nothing when the mouse button is released.
+     * The mouse does nothing when the button is released.
      * 
-     * @param MouseEvent e, the event the mouse triggers
+     * @param e the event the mouse triggers
      * 
      */
     public void mouseReleased( MouseEvent e ) { }
 
     /**
-     * This method makes sure the mouse does nothing when the mouse is moved.
+     * The mouse does nothing when the wheel is moved.
      * 
-     * @param MouseEvent e, the event the mouse triggers
+     * @param e the event the mouse triggers
      * 
      */
     public void mouseWheelMoved( MouseWheelEvent e ){ }
 
     /**
-     * This method handles clicking "play game" to start the game, and interacting with the board.
+     * When"play game" is clicked starts game with other interactions
      * 
-     * @param MouseEvent e, the event the mouse triggers
+     * @param e the event the mouse triggers
      * 
      */
     public void mouseClicked( MouseEvent e ) {
@@ -446,7 +446,7 @@ public class TicketToRide extends JPanel implements MouseListener
     /**
      * Main method to run program
      *
-     * @param String[] args, command line arguments. 
+     * @param args command line arguments. 
      */
     public static void main(String[] args) {
 
