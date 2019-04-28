@@ -18,7 +18,10 @@ public class TTRDriver {
     private ArrayList<TransportationCard> displayTransCards =  new  ArrayList <  > ();
     /* array of transportation cards that have been discarded*/
     private ArrayList<TransportationCard> discardedTransCards = new ArrayList<>();
+    /* array of locations that are tourist attractions*/
+    private ArrayList<Location> tourist = new ArrayList<>();
     
+
     /* Toolkit used for grabbing Images*/
     private Toolkit toolkit;
     private int numPlayers;
@@ -31,12 +34,10 @@ public class TTRDriver {
         this.numPlayers = numPlayers;
 
         toolkit = Toolkit.getDefaultToolkit();
-        //initialize locations
-        initLocations();
-        //initialize routes
-        initRoutes();
         //initialize card decks
         readCardImages();
+        //initialize routes
+        initRoutes();
         //shuffle transportation cards
         shuffleTransportCards();
         //set up players
@@ -64,9 +65,22 @@ public class TTRDriver {
             nextPlayersTurn();
         }
 
-        //add scoring here
+        for (Player p: players) {
+            for (DestinationCard c: p.destHand){
+                isComplete(p,c);
+            }
+            addTouristScore(p);
+        }
+        
+        int winner = 0;
+        for(int i = 1; i < numPlayers; i++) {
+            if (players.get(i).getScore() < players.get(winner).getScore()) winner = i;
+        }
+
+        System.out.println(players.get(winner).getName() + " has won with a score of " + players.get(winner).getScore() + "!");
 
     }
+
     public void nextPlayersTurn(){
         if(playerTurn<numPlayers-1){
             playerTurn = playerTurn +1;
@@ -98,25 +112,67 @@ public class TTRDriver {
     }
 
     public void readCardImages(){
+        Location lincolnCenter = new Location("LINCOLN_CENTER", 308, 31, false);
+        Location centralPark = new Location("CENTRAL_PARK", 456, 21, true);
+        Location timesSquare = new Location("TIMES_SQUARE", 392, 159, true);
+        Location midtownWest = new Location("MIDTOWN_WEST", 283,184, false);
+        Location unitedNations = new Location("UNITED_NATIONS", 589, 152, true);
+        Location empireStateBldg = new Location("EMPIRE_STATE_BUILDING", 451, 251, true);
+        Location chelsea = new Location("CHELSEA", 517, 328, true);
+        Location gramercyPark = new Location("GRAMERCY_PARK", 517, 328, false);
+        Location greenwichVillage = new Location("GREENWICH_VILLAGE", 485, 464, true);
+        Location eastVillage = new Location("EAST_VILLAGE", 642, 459, false);
+        Location soho = new Location("SOHO", 392, 594, false);
+        Location lowerEastSide = new Location("LOWER_EAST_SIDE", 623,557, false);
+        Location chinatown = new Location("CHINATOWN", 526, 616, true);
+        Location wallStreet = new Location("WALL_STREET", 480, 723, true);
+        Location brooklyn = new Location("BROOKLYN", 689, 741, true);
+
+        locations.add(lincolnCenter);
+        locations.add(centralPark);
+        locations.add(timesSquare);
+        locations.add(midtownWest);
+        locations.add(unitedNations);
+        locations.add(empireStateBldg);
+        locations.add(chelsea);
+        locations.add(gramercyPark);
+        locations.add(greenwichVillage);
+        locations.add(eastVillage);
+        locations.add(soho);
+        locations.add(lowerEastSide);
+        locations.add(chinatown);
+        locations.add(wallStreet);
+        locations.add(brooklyn);
+        
+        tourist.add(centralPark);
+        tourist.add(timesSquare);
+        tourist.add(unitedNations);
+        tourist.add(empireStateBldg);
+        tourist.add(chelsea);
+        tourist.add(greenwichVillage);
+        tourist.add(chinatown);
+        tourist.add(wallStreet);
+        tourist.add(brooklyn);
+        
         /* read in destination card images and save them in an arraylist*/
-        DestinationCard centralChelsea5 =  new  DestinationCard(5, "CENTRAL_PARK", "CHELSEA", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_chelsea_5.jpg"));
-        DestinationCard centralChina8 =  new  DestinationCard(8, "CENTRAL_PARK", "CHINATOWN", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_china_8.jpg"));
-        DestinationCard centralGramercy4 =  new  DestinationCard(4, "CENTRAL_PARK", "GRAMERCY_PARK", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_gramercy_4.jpg"));
-        DestinationCard centralMidtown3 =  new  DestinationCard(3, "CENTRAL_PARK", "MIDTOWN_WEST", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_midtown_3.jpg"));
-        DestinationCard chelseaBrooklyn8 =  new  DestinationCard(8, "CHELSEA", "BROOKLYN", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/chelsea_brooklyn_8.jpg"));
-        DestinationCard chelseaWall6 =  new  DestinationCard(6, "CHELSEA", "WALL_STREET", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/chelsea_wall_6.jpg"));
-        DestinationCard chinaGramercy4 =  new  DestinationCard(4, "CHINATOWN", "GRAMERCY_PARK", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/china_gramercy_4.jpg"));
-        DestinationCard eastSoho4 =  new  DestinationCard(4, "EAST_VILLAGE", "SOHO", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/east_soho_4.jpg"));
-        DestinationCard empireBrooklyn7 =  new  DestinationCard(7, "EMPIRE_STATE_BUILDING", "BROOKLYN", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/empire_brooklyn_7.jpg"));
-        DestinationCard empireGreen3 =  new  DestinationCard(3, "EMPIRE_STATE_BUILDING", "GREENWICH_VILLAGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/empire_green_3.jpg"));
-        DestinationCard lincolnEmpire3 =  new  DestinationCard(3, "LINCON_CENTER", "EMPIRE_STATE_BUILDING", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/lincoln_empire_3.jpg"));
-        DestinationCard lincolnGreen6 =  new  DestinationCard(6, "LINCON_CENTER", "GREENWICH_VILLAGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/lincoln_geen_6.jpg"));
-        DestinationCard lowerEastWall2 =  new  DestinationCard(2, "LOWER_EAST_SIDE", "WALL_STREET", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/lowerEast_wall_2.jpg"));
-        DestinationCard midWestUN3 =  new  DestinationCard(3, "MIDTOWN_WEST", "UNITED_NATIONS", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/midWest_UN_3.jpg"));
-        DestinationCard timesBrooklyn8 =  new  DestinationCard(8, "TIMES_SQUARE", "BROOKLYN", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_brooklyn_8.jpg"));
-        DestinationCard timesEast4 =  new  DestinationCard(4, "TIMES_SQUARE", "EAST_VILLAGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_east_4.jpg"));
-        DestinationCard timesSoho6 =  new  DestinationCard(6, "TIMES_SQUARE", "SOHO", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_soho_6.jpg"));
-        DestinationCard UNWall8 =  new  DestinationCard(8, "UNITED_NATIONS", "WALL_STREET", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/UN_wall_8.jpg"));
+        DestinationCard centralChelsea5 =  new  DestinationCard(5, centralPark, chelsea, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_chelsea_5.jpg"));
+        DestinationCard centralChina8 =  new  DestinationCard(8, centralPark, chinatown, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_china_8.jpg"));
+        DestinationCard centralGramercy4 =  new  DestinationCard(4, centralPark, gramercyPark, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_gramercy_4.jpg"));
+        DestinationCard centralMidtown3 =  new  DestinationCard(3, centralPark, midtownWest, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_midtown_3.jpg"));
+        DestinationCard chelseaBrooklyn8 =  new  DestinationCard(8, chelsea, brooklyn, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/chelsea_brooklyn_8.jpg"));
+        DestinationCard chelseaWall6 =  new  DestinationCard(6, chelsea, wallStreet, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/chelsea_wall_6.jpg"));
+        DestinationCard chinaGramercy4 =  new  DestinationCard(4, chinatown, gramercyPark, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/china_gramercy_4.jpg"));
+        DestinationCard eastSoho4 =  new  DestinationCard(4, eastVillage, soho, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/east_soho_4.jpg"));
+        DestinationCard empireBrooklyn7 =  new  DestinationCard(7, empireStateBldg, brooklyn, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/empire_brooklyn_7.jpg"));
+        DestinationCard empireGreen3 =  new  DestinationCard(3, empireStateBldg, greenwichVillage, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/empire_green_3.jpg"));
+        DestinationCard lincolnEmpire3 =  new  DestinationCard(3, lincolnCenter, empireStateBldg, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/lincoln_empire_3.jpg"));
+        DestinationCard lincolnGreen6 =  new  DestinationCard(6, lincolnCenter, greenwichVillage, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/lincoln_geen_6.jpg"));
+        DestinationCard lowerEastWall2 =  new  DestinationCard(2, lowerEastSide, wallStreet, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/lowerEast_wall_2.jpg"));
+        DestinationCard midWestUN3 =  new  DestinationCard(3, midtownWest, unitedNations, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/midWest_UN_3.jpg"));
+        DestinationCard timesBrooklyn8 =  new  DestinationCard(8, timesSquare, brooklyn, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_brooklyn_8.jpg"));
+        DestinationCard timesEast4 =  new  DestinationCard(4, timesSquare, eastVillage, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_east_4.jpg"));
+        DestinationCard timesSoho6 =  new  DestinationCard(6, timesSquare, soho, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_soho_6.jpg"));
+        DestinationCard UNWall8 =  new  DestinationCard(8, unitedNations, wallStreet, toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/UN_wall_8.jpg"));
         destCards.add(centralChelsea5);
         destCards.add(centralChina8);
         destCards.add(centralGramercy4);
@@ -176,6 +232,7 @@ public class TTRDriver {
         transCardsUpright.add(rainbow2);
 
     }
+
     public ArrayList<TransportationCard> getUprightTrans(){
         return transCardsUpright;
     }
@@ -356,6 +413,7 @@ public class TTRDriver {
         }
 
     }
+
     public void drawTransCards(){
         //player may make a blind draw or draw from the displayed cards
         //if the player takes a face up rainbow taxi card, they may not take another card that turn
@@ -493,6 +551,7 @@ public class TTRDriver {
         }
 
     }
+
     public void printAvailableRoutes(){
         System.out.println("These routes are available: ");
         for(int i = 1; i<= routes.size(); i++){
@@ -500,7 +559,7 @@ public class TTRDriver {
         }
     }
 
-    public boolean claimRoute(){
+     public boolean claimRoute(){
         boolean canClaim = true;
         //to claim a route, the player must have the correct number and color of trans cards and enough taxis
         //a player cannot claim both routes if there is a double route
@@ -685,39 +744,42 @@ public class TTRDriver {
 
     }
 
-    public void initLocations(){
-        Location lincolnCenter = new Location("LINCOLN_CENTER", 308, 31, false);
-        Location centralPark = new Location("CENTRAL_PARK", 456, 21, true);
-        Location timesSquare = new Location("TIMES_SQUARE", 392, 159, true);
-        Location midtownWest = new Location("MIDTOWN_WEST", 283,184, false);
-        Location unitedNations = new Location("UNITED_NATIONS", 589, 152, true);
-        Location empireStateBldg = new Location("EMPIRE_STATE_BUILDING", 451, 251, true);
-        Location chelsea = new Location("CHELSEA", 517, 328, true);
-        Location gramercyPark = new Location("GRAMERCY_PARK", 517, 328, false);
-        Location greenwichVillage = new Location("GREENWICH_VILLAGE", 485, 464, true);
-        Location eastVillage = new Location("EAST_VILLAGE", 642, 459, false);
-        Location soho = new Location("SOHO", 392, 594, false);
-        Location lowerEastSide = new Location("LOWER_EAST_SIDE", 623,557, false);
-        Location chinatown = new Location("CHINATOWN", 526, 616, true);
-        Location wallStreet = new Location("WALL_STREET", 480, 723, true);
-        Location brooklyn = new Location("BROOKLYN", 689, 741, true);
+        public void isComplete(Player p,DestinationCard d) {
+        ArrayList<Location> checked = new ArrayList<Location>();
+        Location l1 = d.getDest1();
+        Location l2 = d.getDest2();
+        if (isCompleteRec(p,checked, l1, l2)){
+            p.addScore(d.getNum());
+        }
+        else  p.addScore(-(d.getNum()));
+    }
 
-        locations.add(lincolnCenter);
-        locations.add(centralPark);
-        locations.add(timesSquare);
-        locations.add(midtownWest);
-        locations.add(unitedNations);
-        locations.add(empireStateBldg);
-        locations.add(chelsea);
-        locations.add(gramercyPark);
-        locations.add(greenwichVillage);
-        locations.add(eastVillage);
-        locations.add(soho);
-        locations.add(lowerEastSide);
-        locations.add(chinatown);
-        locations.add(wallStreet);
-        locations.add(brooklyn);
+    public boolean isCompleteRec(Player p,ArrayList<Location> checked, Location l1, Location l2) {
+        for (Route r: p.claimed) {
+            if (r.loc1.getName().equals(l2.getName())) return true;
+            if (r.loc2.getName().equals(l2.getName())) return true;
+            if (!contains(checked,l1)) {
+                checked.add(l1);
+                if (isCompleteRec(p,checked,r.loc2,l2)) return true;
+            }
+        }
+        return false;
+    }
 
+    public boolean contains(ArrayList<Location> checked,Location loc) {
+        for (Location l: checked) {
+            if (l.getName().equals(loc.getName())) return true;
+        }
+        return false;
+    }
+    
+    public void addTouristScore(Player p) {
+        for (Location l:tourist) {
+            for (Route r: p.claimed) {
+                if (r.loc1.getName().equals(l.getName())) p.addScore(1);
+                if (r.loc2.getName().equals(l.getName())) p.addScore(1);
+            }
+        }
     }
 
     public void initRoutes(){
@@ -805,8 +867,8 @@ public class TTRDriver {
         routes.add(wallBrooklyn);
         routes.add(wallBrooklyn2);
 
-
     }
+
 
     public static void main(String[] args) {
         System.out.println("Enter the number of players");
