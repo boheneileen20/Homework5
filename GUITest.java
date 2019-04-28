@@ -991,15 +991,27 @@ public class GUITest extends JPanel implements MouseListener {
         seeDestButton.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+                public void actionPerformed(ActionEvent arg0) {
 
-                //  creates a pop up window listing which destination cards the player has
-                String message = "You have these cards:";
-                for(DestinationCard d: driver.getPlayers().get(driver.getPlayerTurn()).getDestHand()){
-                    message = message + " " + d.toString();
+                    //  creates a pop up window listing which destination cards the player has
+                    Image[] handDraw = new Image[18];
+                    int count = 0;
+                    //make scrolling panel with images of destination cards on it
+                    JPanel handPanel = new JPanel();
+                    handPanel.setSize(new Dimension(200, 150));
+                    handPanel.setLayout(new GridLayout(3, 6));
+                    //get each destination card the player has
+                    for (DestinationCard d: driver.getPlayers().get(driver.getPlayerTurn()).getDestHand()){
+                        handDraw[count] = d.getPicture();
+                        handDraw[count] = handDraw[count].getScaledInstance(200,150, 0);
+                        JLabel picLabel = new JLabel(new ImageIcon(handDraw[count]));
+                        handPanel.add(picLabel);
+                    }
+                    // add to the scrolling panel the panel with the images
+                    JScrollPane scroll = new JScrollPane(handPanel);
+                    //show panel
+                    JOptionPane.showMessageDialog(frame, scroll, "These are your destination cards", JOptionPane.INFORMATION_MESSAGE);
                 }
-                JOptionPane.showMessageDialog(frame, message);
-            }
         });
 
 
