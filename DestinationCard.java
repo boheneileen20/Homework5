@@ -7,20 +7,29 @@ import java.awt.*;
  */
 public class DestinationCard
 {
-    //the value on the card
+    /**
+     * the value on the card
+     */
     private int num;
-    //one destination on the card
+    /**
+     * one destination on the card
+     */
     private String dest1;
-    //the other destination on the card
+    /**
+     * the other destination on the card
+     */
     private String dest2;
-    //the picture of the card
+    /**
+     * the picture of the card
+     */
     private Image picture;
-    
     /**
      * Constructor for objects of the DestinationCard class. Initializes instance variables.
      * 
-     * @param num, the value on the card. dest1, the first destination. dest2, the second destination. picture, 
-     * the image of the card.
+     * @param int num, the value on the card.
+     * @param String dest1, the first destination.
+     * @param String dest2, the second destination.
+     * @param Image picture, the image of the card.
      */
     public DestinationCard(int num, String dest1, String dest2, Image picture){
         this.num = num;
@@ -28,7 +37,7 @@ public class DestinationCard
         this.dest2 = dest2;
         this.picture = picture;
     }
-    
+
     /**
      * Returns the number of the card
      * 
@@ -37,7 +46,7 @@ public class DestinationCard
     public int getNum(){
         return num;
     }
-    
+
     /**
      * Returns the first destination
      * 
@@ -46,7 +55,7 @@ public class DestinationCard
     public String getDest1(){
         return dest1;
     }
-    
+
     /**
      * Returns the second destination
      * 
@@ -55,7 +64,7 @@ public class DestinationCard
     public String getDest2(){
         return dest2;
     }
-    
+
     /**
      * Returns the card image
      * 
@@ -65,10 +74,15 @@ public class DestinationCard
         return picture;
     }
 
+    /**
+     * String of the desination card
+     * 
+     * @return String message, the information of the destination card
+     */
     public String toString(){
         String message = dest1 + " to " + dest2 + " for " + num + " points.";
         return message;
 
     }
-    
+
 }
