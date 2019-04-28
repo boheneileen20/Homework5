@@ -532,19 +532,31 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Called when the user chooses to draw a destination card. Offers two cards
-    * and allows the user to pick choice 1, 2, or both. Adds to their hand and
-    * discards unwanted cards (if any).
-    * */
+     * Called when the user chooses to draw a destination card. Offers two cards
+     * and allows the user to pick choice 1, 2, or both. Adds to their hand and
+     * discards unwanted cards (if any).
+     * */
     public void drawDest(){
         //  get current player
         Player p = driver.getPlayers().get(driver.getPlayerTurn());
         //  uses driver to draw two destination cards and saves in an array
         ArrayList<DestinationCard> choices = driver.drawTwoDest();
         //  asks the user to enter "1" to take the first card, "2" for the second, or "both"
-        String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
+        String playerChoice = "";
+        boolean validChoice = false;
+        //loops until 1, 2, both is given as input
+        while(!validChoice) {
+            playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
                 choices.get(1) + " \n" +
                 "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
+            if (playerChoice.equals("1") || playerChoice.equals("2") || playerChoice.equals("both")) {
+                validChoice = true;
+            }
+            else {
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Enter a valid choice");
+            }
+        }
         //  deals the cards using the driver
         driver.dealInitialDestCardsGUI(playerChoice, choices, p);
     }
