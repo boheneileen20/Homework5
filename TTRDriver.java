@@ -4,9 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+
+/*
+* Driver class for the project. This code began as a completey text-based version of the game,
+* then methods were added to help cooperate with GUI. This class also reads in many images
+* and creates the arraylists that serve as the card decks.
+* 
+* Author: Eileen Bohen
+* Version: Spring 2019
+* */
 public class TTRDriver {
+    //  ArrayLis of the player in the game
     private ArrayList<Player> players = new ArrayList<>();
+    //  arraylist of locations on the board
     private ArrayList<Location> locations = new ArrayList<>();
+    //  arraylist of routes on the board
     private ArrayList<Route> routes = new ArrayList<>();
     /* array of destination cards that make up the deck*/
     private ArrayList<DestinationCard> destCards =  new  ArrayList <  > ();
@@ -16,15 +28,21 @@ public class TTRDriver {
     private ArrayList<TransportationCard> transCardsUpright =  new  ArrayList <  > ();
     /* array of transportation cards that make up the deck*/
     private ArrayList<TransportationCard> displayTransCards =  new  ArrayList <  > ();
-    /* array of transportation cards that have been discarded*/
-    private ArrayList<TransportationCard> discardedTransCards = new ArrayList<>();
-    
     /* Toolkit used for grabbing Images*/
     private Toolkit toolkit;
+    //  the number of players in the game
     private int numPlayers;
+    //  the index of the current Player in the players AL 
     private int playerTurn;
+    //  true if game is over
     private boolean gameOver;
 
+    
+    /*
+    * Constructs driver. Calls methods that initialize card decks.
+    * 
+    * @param    number of players in the game.
+    * */
     public TTRDriver(int numPlayers){
         gameOver = false;
         playerTurn = 0;
@@ -39,34 +57,46 @@ public class TTRDriver {
         readCardImages();
         //shuffle transportation cards
         shuffleTransportCards();
-        //set up players
-        setUpPlayers();
-        //deal initial transportation cards
-        dealInitialTransCards();
-        //place 5 transportation cards face up
+        
+        
+        //set up players - COMMENTED OUT WHEN NO LONGER USED FOR TEXT BASED IMPLEMENTATION
+        //setUpPlayers();
+        
+        
+        //deal initial transportation cards - COMMENTED OUT WHEN NO LONGER USED FOR TEXT BASED IMPLEMENTATION
+        //dealInitialTransCards();
+        
+        //pick trans cards to display
         pickDisplayTransCards();
         //shuffle destination cards
         shuffleDestCards();
-        //deal initial destination cards to players
-        dealInitialDestCards();
+        
+        //deal initial destination cards to players - COMMENTED OUT WHEN NO LONGER USED FOR TEXT BASED IMPLEMENTATION
+        //dealInitialDestCards();
 
-        while(!gameOver){
-            players.get(playerTurn).printStats();
-            turn();
-            nextPlayersTurn();
 
-        }
-        System.out.println("Everyone has only one turn left!!!");
-        //after one player has fewer than 3 taxis, each player gets one more turn
-        for(int i = 0; i<numPlayers; i++){
-            players.get(playerTurn).printStats();
-            turn();
-            nextPlayersTurn();
-        }
+//        while(!gameOver){
+//            players.get(playerTurn).printStats();
+//            turn();
+//            nextPlayersTurn();
+//
+//        }
+//        System.out.println("Everyone has only one turn left!!!");
+//        //after one player has fewer than 3 taxis, each player gets one more turn
+//        for(int i = 0; i<numPlayers; i++){
+//            players.get(playerTurn).printStats();
+//            turn();
+//            nextPlayersTurn();
+//        }
 
-        //add scoring here
+        //add scoring here NEEDS FIXING: ADD SCORING
+
 
     }
+
+    /*
+    * Changes playerTurn (index of current Player in players AL) to the next player
+    * */
     public void nextPlayersTurn(){
         if(playerTurn<numPlayers-1){
             playerTurn = playerTurn +1;
@@ -76,15 +106,28 @@ public class TTRDriver {
         }
     }
 
+    /*
+    * Gets the index of the current Player in the players aL
+    * 
+    * @return   the index (int) of the current player
+    * */
     public int getPlayerTurn(){
         return playerTurn;
     }
 
+    /*
+    * Creates a new player object and adds to the players AL
+    * 
+    * @param String player's name, int players age
+    * */    
     public void makePlayer(String name, int age){
         Player p = new Player(name,age);
         players.add(p);
     }
 
+    /*
+    * Sets up the players for the text based implementation of the game
+    * */
     public void setUpPlayers(){
         Scanner s = new Scanner(System.in);
         for(int i = 1; i<=numPlayers; i++){
@@ -97,6 +140,11 @@ public class TTRDriver {
         }
     }
 
+    /*
+    * Reads in card images  and initializes card objects
+    * NEEDS FIXING: paths for file names only work on Eileen's machine
+    * 
+    * */
     public void readCardImages(){
         /* read in destination card images and save them in an arraylist*/
         DestinationCard centralChelsea5 =  new  DestinationCard(5, "CENTRAL_PARK", "CHELSEA", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/central_chelsea_5.jpg"));
@@ -117,6 +165,8 @@ public class TTRDriver {
         DestinationCard timesEast4 =  new  DestinationCard(4, "TIMES_SQUARE", "EAST_VILLAGE", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_east_4.jpg"));
         DestinationCard timesSoho6 =  new  DestinationCard(6, "TIMES_SQUARE", "SOHO", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/times_soho_6.jpg"));
         DestinationCard UNWall8 =  new  DestinationCard(8, "UNITED_NATIONS", "WALL_STREET", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/UN_wall_8.jpg"));
+        
+        //  add to dest cards array (deck)
         destCards.add(centralChelsea5);
         destCards.add(centralChina8);
         destCards.add(centralGramercy4);
@@ -152,7 +202,7 @@ public class TTRDriver {
         TransportationCard red1 =  new  TransportationCard("RED", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/red_1.jpg"));
         TransportationCard red2 =  new  TransportationCard("RED", toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/red_2.jpg"));
         /* this arraylist holds the horizontal images*/
-        //there are 6 of each of the color cards
+        //there are 8 of each of the color cards
         for(int i = 0; i<6; i++) {
             transCards.add(blue1);
             transCards.add(gray1);
@@ -161,7 +211,7 @@ public class TTRDriver {
             transCards.add(pink1);
             transCards.add(red1);
         }
-        //add the 8 rainbow cards
+        //add the 6 rainbow cards
         for(int i = 0; i<8; i++) {
             transCards.add(rainbow1);
         }
@@ -175,15 +225,28 @@ public class TTRDriver {
         transCardsUpright.add(red2);
         transCardsUpright.add(rainbow2);
 
+
     }
+
+    /*
+    * Gets the upright trans cards array (used for GUI)
+    * 
+    * @return the arraylist holding TransportaionCard objects that have vertical images
+    * */
     public ArrayList<TransportationCard> getUprightTrans(){
         return transCardsUpright;
     }
 
+    /*
+    * Shuffles the transportation cards
+    * */
     public void shuffleTransportCards(){
         Collections.shuffle(transCards);
     }
 
+    /*
+    * deals initial transportation cards by adding two cards to each player's hand
+    * */
     public void dealInitialTransCards(){
         for(Player p: players){
             p.addToTransHand(transCards.get(0));
@@ -193,21 +256,35 @@ public class TTRDriver {
         }
     }
 
+    /*
+    * Gets the players AL
+    * 
+    * @return ArrayList of Players in the game
+    * */
     public ArrayList<Player> getPlayers(){
         return players;
     }
 
+    /*
+    * Gets the transportation card deck
+    * 
+    * @return ArrayList of TransportationCards that represents the deck
+    * */
     public ArrayList<TransportationCard> getTransDeck(){
         return transCards;
     }
 
+    /*
+    * Picks transportation cards to display. This is important because if there is ever more than
+    * 2 rainbow taxi cards on display, all 5 cards must be discarded
+    * */
     public void pickDisplayTransCards(){
-        //add any current display cards back into array
+        //  add any current display cards back into array
         for(int i = 0; i<displayTransCards.size(); i++){
             transCards.add(displayTransCards.get(i));
             displayTransCards.remove(i);
         }
-        //keep picking trans cards to display until a valid set is found
+        //  keep picking trans cards to display until a valid set is found
         boolean foundSet = false;
         while(!foundSet){
             Collections.shuffle(transCards);
@@ -232,6 +309,11 @@ public class TTRDriver {
         }
     }
 
+    /*
+    * Checks if the displayTransCards array is valid (no more than 2 taxis)
+    * 
+    * @return boolean if display cards contain fewer than 2 taxis
+    * */
     public boolean validVisibleTrans(){
         int count = 0;
         for(TransportationCard t: displayTransCards){
@@ -245,14 +327,27 @@ public class TTRDriver {
         return false;
     }
 
+    /*
+    * Gets array of transportation cards to display
+    * 
+    * @return AL of TransportaitonCard objects that are to be displayed face up
+    * */
     public ArrayList<TransportationCard> getDisplayTransCards(){
         return displayTransCards;
     }
-
+    
+    /*
+    * Shuffles the deck of destination cards
+    * */
     public void shuffleDestCards(){
         Collections.shuffle(destCards);
     }
 
+    /*
+    * Draws to destination cards from the top of the pile
+    * 
+    * @return ArrayList of destination card objects that were drawn
+    * */
     public ArrayList<DestinationCard> drawTwoDest(){
         DestinationCard choice1 = destCards.get(0);
         DestinationCard choice2 = destCards.get(1);
@@ -262,6 +357,13 @@ public class TTRDriver {
         return result;
     }
 
+    /*
+    * Method to assist GUI in dealing destination cards. Takes the player's choice, the cards they were
+    * given to choose from, and the Player in question, and adds to appropriate ArrayLists
+    * 
+    * @param    String playersChoice is "1" if the chose the first card, "2" for the second card, or "both"
+    * for both cards. ArrayList of DestinationCard objects they chose from, and the Player choosing the card
+    * */
     public void dealInitialDestCardsGUI(String playersChoice, ArrayList<DestinationCard> choices, Player p){
         if(playersChoice.equals("1")){
             //add card to hand, remove that card from deck
@@ -288,11 +390,13 @@ public class TTRDriver {
         }
     }
 
+    /*
+    * deals initial destination cards in original text-based implementation
+    * */
     public void dealInitialDestCards(){
         Scanner s = new Scanner(System.in);
         for(Player p: players){
-            String name = p.getName();
-            System.out.println(name +", you may pick one or both of these cards: ");
+            System.out.println("You may pick one or both of these cards: ");
             DestinationCard choice1 = destCards.get(0);
             DestinationCard choice2 = destCards.get(1);
             System.out.println("Choice 1: " + choice1.toString());
@@ -326,20 +430,15 @@ public class TTRDriver {
         }
     }
 
-    public void turn(){
-        //players may either draw a transport card, draw dest cards, or claim route
-        Scanner s = new Scanner(System.in);
-        System.out.println("It is " + players.get(playerTurn).getName() + "'s turn.");
+    /*
+    * turn method for original text based implementation, loops through player
+    * options until they've finished their turn
+    * */
+    public void turn(int turnChoice){
 
         boolean finishedTurn = false;
         while(!finishedTurn) {
-            System.out.println("Face up transportation cards: ");
-            for(TransportationCard t: getDisplayTransCards()){
-                System.out.print(t.getColor() + " ");
-            }
-            System.out.println();
-            System.out.println("Enter 1 to draw transportation cards, 2 to draw destination cards, or 3 to claim a route");
-            int turnChoice = s.nextInt();
+
 
             if (turnChoice == 1) {
                 drawTransCards();
@@ -356,6 +455,10 @@ public class TTRDriver {
         }
 
     }
+
+    /*
+    * trans card drawing method for text-based implementation
+    * */
     public void drawTransCards(){
         //player may make a blind draw or draw from the displayed cards
         //if the player takes a face up rainbow taxi card, they may not take another card that turn
@@ -398,6 +501,7 @@ public class TTRDriver {
                 return;
             }
         }
+
 
         //repeat for second card
         System.out.println("Enter \"blind\" to draw from the top of the transportation deck");
@@ -442,9 +546,41 @@ public class TTRDriver {
                 pickDisplayTransCards();
             }
 
+
         }
     }
 
+    /*
+    * Replaces one of the face up cards with the top card in the face down pile
+    * 
+    * @param int index of the element to replace, card to replace it with
+    * */
+    public void setDisplayTransCards(int index, TransportationCard t){
+        displayTransCards.set(index, transCards.get(0));
+
+    }
+
+    /*
+    * Sets the player turn to the Player at the given index
+    * 
+    * @param the playerIndex to set playerTurn to
+    * */
+    public void setPlayerTurn(int playerIndex){
+        playerTurn = playerIndex;
+    }
+
+    /*
+    * Removes the card at the given index
+    * 
+    * @param    index of card to remove
+    * */
+    public void removeFromTransDeck(int index){
+        transCards.remove(index);
+    }
+    
+    /*
+    * Draw dest card method for text-based implementation 
+    * */
     public void drawDestCards(){
         //player chooses 2 destination cards and may keep one or both of them
         //if there is only one card left, they must take that card
@@ -492,14 +628,56 @@ public class TTRDriver {
 
         }
 
+
     }
+
+    /*
+    * Returns a string with the available routes
+    * 
+    * @return String of all available routes (unclaimed)
+    * */
+    public String getAvailableRoutes(){
+        String result = "These routes are available: ";
+        for(int i = 1; i<= routes.size(); i++){
+            result = result + "\n";
+            result = result + (i + ": " + routes.get(i-1).toString());
+        }
+        return result;
+    }
+    
+    /*
+    * Print route method used in text-based implementation
+    * */
     public void printAvailableRoutes(){
         System.out.println("These routes are available: ");
         for(int i = 1; i<= routes.size(); i++){
             System.out.println(i + ": " + routes.get(i-1).toString());
         }
     }
+    
 
+    /*
+    * Returns true if a Player has enough taxis to claim a route
+    * 
+    * @param Route, the route they want to claim, Player the player claiming
+    * @return boolean, true if they have enough taxis
+    * */
+    public boolean enoughTaxis(Route r, Player p){
+        
+        String[] recs = r.getRequirement().split(" "); //the requirements of the route
+        int taxisRequired = Integer.parseInt(recs[1]); //the taxis needed for the route
+        int taxisHeld = p.getTaxis();   //  taxis player has
+        if(taxisHeld>= taxisRequired){
+            return true;
+        }
+        return false;
+    }
+    
+    /*
+    * Claim route method for text-based implementation
+    * 
+    * @return true if the player successfully claims the route
+    * */
     public boolean claimRoute(){
         boolean canClaim = true;
         //to claim a route, the player must have the correct number and color of trans cards and enough taxis
@@ -544,9 +722,6 @@ public class TTRDriver {
                     }
                     System.out.println("You have successfully acquired the route! Your turn is over.");
                     players.get(playerTurn).addRoute(desired);
-                    players.get(playerTurn).claimRouteScore(taxisRequired);
-                    //remove route from available
-                    routes.remove(desired);
                     return true;
                 }
             }
@@ -572,8 +747,6 @@ public class TTRDriver {
                         //remove those cards from hand and give route
                         for(int i = 0; i<requiredMatchCards; i++) {
                             players.get(playerTurn).removeFromTransHand(colorToPayWith);
-                            //discardedTransCard.add(TransportationCard t = new TransportationCard
-                            
                         }
                         for(int i = 0; i<choice; i++) {
                             players.get(playerTurn).removeFromTransHand("RAINBOW");
@@ -585,9 +758,6 @@ public class TTRDriver {
                         }
                         System.out.println("You have successfully claimed the route! Your turn is over.");
                         players.get(playerTurn).addRoute(desired);
-                        players.get(playerTurn).claimRouteScore(taxisRequired);
-                        //remove route from available
-                        routes.remove(desired);
                         return true;
                     }
                 }
@@ -612,12 +782,10 @@ public class TTRDriver {
                     }
                     System.out.println("You have successfully claimed the route! Your turn is over.");
                     players.get(playerTurn).addRoute(desired);
-                    players.get(playerTurn).claimRouteScore(taxisRequired);
-                    //remove route from available
-                    routes.remove(desired);
                     return true;
                 }
             }
+
 
 
         }
@@ -667,6 +835,8 @@ public class TTRDriver {
                 players.get(playerTurn).removeFromTransHand(routeColor);
             }
 
+            //DO CARDS GET PUT BACK IN THE DECK???
+
             //add route to players possession
             //deduct taxis
             players.get(playerTurn).deductTaxis(taxisRequired);
@@ -675,32 +845,34 @@ public class TTRDriver {
             }
             System.out.println("You have successfully claimed a route! Your turn is now over.");
             players.get(playerTurn).addRoute(desired);
-            players.get(playerTurn).claimRouteScore(taxisRequired);
-            //remove route from available
-            routes.remove(desired);
-            
             return true;
         }
         return canClaim;
 
-    }
 
+        }
+
+        
+    /*
+    * Initializes Location objects 
+    * 
+    * */
     public void initLocations(){
-        Location lincolnCenter = new Location("LINCOLN_CENTER", 308, 31, false);
-        Location centralPark = new Location("CENTRAL_PARK", 456, 21, true);
-        Location timesSquare = new Location("TIMES_SQUARE", 392, 159, true);
-        Location midtownWest = new Location("MIDTOWN_WEST", 283,184, false);
-        Location unitedNations = new Location("UNITED_NATIONS", 589, 152, true);
-        Location empireStateBldg = new Location("EMPIRE_STATE_BUILDING", 451, 251, true);
-        Location chelsea = new Location("CHELSEA", 517, 328, true);
-        Location gramercyPark = new Location("GRAMERCY_PARK", 517, 328, false);
-        Location greenwichVillage = new Location("GREENWICH_VILLAGE", 485, 464, true);
-        Location eastVillage = new Location("EAST_VILLAGE", 642, 459, false);
-        Location soho = new Location("SOHO", 392, 594, false);
-        Location lowerEastSide = new Location("LOWER_EAST_SIDE", 623,557, false);
-        Location chinatown = new Location("CHINATOWN", 526, 616, true);
-        Location wallStreet = new Location("WALL_STREET", 480, 723, true);
-        Location brooklyn = new Location("BROOKLYN", 689, 741, true);
+        Location lincolnCenter = new Location("Lincoln Center", 308, 31);
+        Location centralPark = new Location("Central Park", 456, 21);
+        Location timesSquare = new Location("Times Square", 392, 159);
+        Location midtownWest = new Location("Midtown West", 283,184);
+        Location unitedNations = new Location("United Nations", 589, 152);
+        Location empireStateBldg = new Location("Empire State Building", 451, 251);
+        Location chelsea = new Location("Chelsea", 517, 328);
+        Location gramercyPark = new Location("Gramercy Park", 517, 328);
+        Location greenwichVillage = new Location("Greenwich Village", 485, 464);
+        Location eastVillage = new Location("East Village", 642, 459);
+        Location soho = new Location("Soho", 392, 594);
+        Location lowerEastSide = new Location("Lower East Side", 623,557);
+        Location chinatown = new Location("Chinatown", 526, 616);
+        Location wallStreet = new Location("Wall Street", 480, 723);
+        Location brooklyn = new Location("Brooklyn", 689, 741);
 
         locations.add(lincolnCenter);
         locations.add(centralPark);
@@ -720,6 +892,9 @@ public class TTRDriver {
 
     }
 
+    /*
+    * Initializes route objects 
+    * */
     public void initRoutes(){
         Route lincolnCentral = new Route(locations.get(0), locations.get(1), "orange 2");
         Route lincolnMidtown = new Route(locations.get(0), locations.get(3), "red 2");
@@ -806,8 +981,22 @@ public class TTRDriver {
         routes.add(wallBrooklyn2);
 
 
+
     }
 
+    /*
+    * gets the routes array
+    * 
+    * @return ArrayList of Route objects (all routes on board)
+    * */
+    public ArrayList<Route> getRoutes(){
+        return routes;
+    }
+
+
+    /*
+    * main method to run text-based implementation
+    * */
     public static void main(String[] args) {
         System.out.println("Enter the number of players");
         Scanner s = new Scanner(System.in);
