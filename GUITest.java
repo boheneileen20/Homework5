@@ -550,15 +550,28 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Called when the user chooses to draw transportation cards. User can draw a
-    * face up card or a face down card. If the user picks a face up taxi card, their
-    * turn is over. They can't pick a face up taxi on their second choice. Adds the
-    * selected cards to their hand.
-    * */
+     * Called when the user chooses to draw transportation cards. User can draw a
+     * face up card or a face down card. If the user picks a face up taxi card, their
+     * turn is over. They can't pick a face up taxi on their second choice. Adds the
+     * selected cards to their hand.
+     * */
     public void drawTrans(){
         //  gets user's decision for first card draw
-        String tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
-                "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
+        boolean validChoice = false;
+        String tCardChoice = "";
+        //loops until blind or face is given as input
+        while(!validChoice) {
+            tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
+                    "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
+            tCardChoice = tCardChoice.toLowerCase();
+            if (tCardChoice.equals("face") || tCardChoice.equals("blind")) {
+                validChoice = true;
+            }
+            else {
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Enter a valid choice");
+            }
+        }
 
         //  if the user wants a blind draw
         if(tCardChoice.equals("blind")){
@@ -577,7 +590,6 @@ public class GUITest extends JPanel implements MouseListener {
             panel2.setBackground(Color.white);
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
-
 
             //center board panel
             game = boardPanel();
@@ -605,7 +617,26 @@ public class GUITest extends JPanel implements MouseListener {
         //  face draw
         else if(tCardChoice.equals("face")){
             //  asks the user for a number (this is the card they want to pick up)
-            int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+            validChoice = false;
+            int faceChoice = 0;
+            //loops until 1, 2, 3, 4, 5 is given
+            while (!validChoice) {
+                try {
+                    faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+                    if (faceChoice >= 1 && faceChoice <= 5) {
+                        validChoice = true;
+                    }
+                    else {
+                        JOptionPane error = new JOptionPane("Error");
+                        error.showMessageDialog(null, "Enter a valid choice");
+                    }
+                }
+                catch (NumberFormatException e) {
+                    //validChoice = false;
+                    //JOptionPane error = new JOptionPane("Error");
+                    return;
+                }
+            }
 
             //  get the card to add to the player's hand
             TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
@@ -634,7 +665,6 @@ public class GUITest extends JPanel implements MouseListener {
                 panel2.setPreferredSize(new Dimension(1000, 800));
                 panel2.setLayout(new BorderLayout());
 
-
                 //center board panel
                 game = boardPanel();
                 //left side panel
@@ -660,16 +690,15 @@ public class GUITest extends JPanel implements MouseListener {
             }
 
             /*
-            * Here's that block of code again. I'm sure there's a better way to
-            * do this, but when I put it in it's own method it stopped working.
-            * */
+             * Here's that block of code again. I'm sure there's a better way to
+             * do this, but when I put it in it's own method it stopped working.
+             * */
             //repaint everything
             //background panel
             JPanel panel2 = new JPanel();
             panel2.setBackground(Color.white);
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
-
 
             //center board panel
             game = boardPanel();
@@ -692,12 +721,21 @@ public class GUITest extends JPanel implements MouseListener {
             frame.getContentPane().add(panel2);
             frame.validate();
 
-
         }
-
         //  repeat the process for the second card
-        tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
-                "Enter \"face\" to draw a face card. You may not draw a rainbow taxi card."));
+        validChoice = false;
+        while(!validChoice) {
+            tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
+                    "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
+            tCardChoice = tCardChoice.toLowerCase();
+            if (tCardChoice.equals("face") || tCardChoice.equals("blind")) {
+                validChoice = true;
+            }
+            else {
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Enter a valid choice");
+            }
+        }
 
         //  process for blind card (could be put in it's own method)
         if(tCardChoice.equals("blind")){
@@ -712,7 +750,6 @@ public class GUITest extends JPanel implements MouseListener {
             panel2.setBackground(Color.white);
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
-
 
             //center board panel
             game = boardPanel();
@@ -739,7 +776,26 @@ public class GUITest extends JPanel implements MouseListener {
 
         //   second face draw
         else if(tCardChoice.equals("face")){
-            int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+            //loops until 1, 2, 3, 4, 5 is given
+            int faceChoice = 0;
+            validChoice = false;
+            while (!validChoice) {
+                try {
+                    faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+                    if (faceChoice >= 1 && faceChoice <= 5) {
+                        validChoice = true;
+                    }
+                    else {
+                        JOptionPane error = new JOptionPane("Error");
+                        error.showMessageDialog(null, "Enter a valid choice");
+                    }
+                }
+                catch (NumberFormatException e) {
+                    //validChoice = false;
+                    //JOptionPane error = new JOptionPane("Error");
+                    return;
+                }
+            }
             //add choice to player hand and remove from display, replacing with top card on deck
             TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
             driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
@@ -755,8 +811,8 @@ public class GUITest extends JPanel implements MouseListener {
 
             //if player chose a taxi, return
             /*
-            * NEEDS FIXING: (i think) so that the player can choose again if they pick rainbow on the second draw
-            * */
+             * NEEDS FIXING: (i think) so that the player can choose again if they pick rainbow on the second draw
+             * */
             if(t.getColor().equals("RAINBOW")){
 
                 //background panel
@@ -764,7 +820,6 @@ public class GUITest extends JPanel implements MouseListener {
                 panel2.setBackground(Color.white);
                 panel2.setPreferredSize(new Dimension(1000, 800));
                 panel2.setLayout(new BorderLayout());
-
 
                 //center board panel
                 game = boardPanel();
@@ -795,7 +850,6 @@ public class GUITest extends JPanel implements MouseListener {
             panel2.setBackground(Color.white);
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
-
 
             //center board panel
             game = boardPanel();
