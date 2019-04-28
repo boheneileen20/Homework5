@@ -227,6 +227,10 @@ public class GUITest extends JPanel implements MouseListener {
      * Completes a players turn. User can draw transportation cards,
      * destination cards, or claim a route.
      * */
+    /*
+     * Completes a players turn. User can draw transportation cards,
+     * destination cards, or claim a route.
+     * */
     public void completeTurn(){
         //  asks user what they would like to do on their turn
         int turnChoice = 0;
@@ -247,7 +251,7 @@ public class GUITest extends JPanel implements MouseListener {
             catch (NumberFormatException e) {
                 validChoice = false;
                 JOptionPane error = new JOptionPane("Error");
-                error.showMessageDialog(null, "Please enter a valid choice");
+                return;
             }
         }
 
@@ -334,25 +338,32 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Called when the user chooses to claim a route. Asks which route they'd like to claim
-    * and checks if they're able to claim it. Awards the route if appropriate.
-    *
-    * */
+     * Called when the user chooses to claim a route. Asks which route they'd like to claim
+     * and checks if they're able to claim it. Awards the route if appropriate.
+     *
+     * */
     public void claimRoute(){
         //  get the current Player object
         Player p = driver.getPlayers().get(driver.getPlayerTurn());
 
         //ask user to enter the endpoints of the route they'd like to claim
-        String location1 = JOptionPane.showInputDialog(frame, "Enter the first endpoint of the route you'd like to claim");
-        String location2 = JOptionPane.showInputDialog(frame, "Enter the second endpoint of the route you'd like to claim");
+        boolean isRoute = false;
+        Route desired = null;
+        while (!isRoute) {
+            String location1 = JOptionPane.showInputDialog(frame, "Enter the first endpoint of the route you'd like to claim");
+            String location2 = JOptionPane.showInputDialog(frame, "Enter the second endpoint of the route you'd like to claim");
 
-        //figure out which route they want
-        Route desired = findRoute(location1, location2);
+            //figure out which route they want
+            desired = findRoute(location1, location2);
 
-        //if they entered an invalid route, return without moving to the next player
-        if(desired == null){
-            JOptionPane.showMessageDialog(frame, "That's not a route!");
-            return;
+            //if they entered an invalid route, return without moving to the next player
+            if(desired == null){
+                JOptionPane.showMessageDialog(frame, "That's not a route!");
+                return;
+            }
+            else {
+                isRoute = true;
+            }
         }
 
         //check if they have enough taxis to claim the route, return if necessary
@@ -362,12 +373,12 @@ public class GUITest extends JPanel implements MouseListener {
         }
 
         /*
-        * If a player has enough taxis, they must state how they'd like to pay for the route.
-        * This is done by making a window pop up that contains text fields for each card
-        * color. The user enters the number of each color card they'd like to
-        * put toward the purchase. If they enter a valid selection of cards, they are given
-        * the route.
-        * */
+         * If a player has enough taxis, they must state how they'd like to pay for the route.
+         * This is done by making a window pop up that contains text fields for each card
+         * color. The user enters the number of each color card they'd like to
+         * put toward the purchase. If they enter a valid selection of cards, they are given
+         * the route.
+         * */
 
         //  text fields for each color card
         JTextField blueNum = new JTextField("0", 5);
@@ -435,7 +446,6 @@ public class GUITest extends JPanel implements MouseListener {
         else{
             JOptionPane.showMessageDialog(frame, "You can claim this route!");
         }
-
 
     }
 
