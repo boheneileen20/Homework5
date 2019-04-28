@@ -6,30 +6,30 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 /*
-* This class contains the main method that must be run to play the game. The class contains an
-* instance of TTRDriver, which handles much of the game logic and initializes many aspects of the
-* game. This class focuses on creating the graphic user interface, using five main panels to
-* display information.
-*
-* The top panel contains a message stating which player's turn it is, as well as a button that
-* the user must press to begin their turn.
-*
-* The left panel contains three panels: one to display the player's transition card hand, one
-* to list player stats (which contains a button panel to view destination cards in a pop up
-* window), and one that contains an image of the back of the destination card.
-*
-* The center panel contains the game board.
-*
-* The right panel contains 6 image panels, 5 of them for the face up transportation cards,
-* and one for the face down cards. There are panels in between for the numbers (which are
-* used to select a card).
-*
-* The final panel is on the bottom. As of now it is not used for anything. One idea is to
-* implement a button that will bring up the game directions.
-*
-* @Author Eileen Bohen
-* @Version Spring 2019
-* */
+ * This class contains the main method that must be run to play the game. The class contains an
+ * instance of TTRDriver, which handles much of the game logic and initializes many aspects of the
+ * game. This class focuses on creating the graphic user interface, using five main panels to
+ * display information.
+ *
+ * The top panel contains a message stating which player's turn it is, as well as a button that
+ * the user must press to begin their turn.
+ *
+ * The left panel contains three panels: one to display the player's transition card hand, one
+ * to list player stats (which contains a button panel to view destination cards in a pop up
+ * window), and one that contains an image of the back of the destination card.
+ *
+ * The center panel contains the game board.
+ *
+ * The right panel contains 6 image panels, 5 of them for the face up transportation cards,
+ * and one for the face down cards. There are panels in between for the numbers (which are
+ * used to select a card).
+ *
+ * The final panel is on the bottom. As of now it is not used for anything. One idea is to
+ * implement a button that will bring up the game directions.
+ *
+ * @Author Eileen Bohen
+ * @Version Spring 2019
+ * */
 public class GUITest extends JPanel implements MouseListener {
     /* Create and set up the window.*/
     private JFrame frame =  new  JFrame("Ticket To Ride NY");
@@ -53,38 +53,67 @@ public class GUITest extends JPanel implements MouseListener {
     //right panel
     JPanel right;
 
-//    true if the current player's turn is over
+    //    true if the current player's turn is over
     boolean turnOver;
 
     /*
-    * Constructor for the GUITest class. Begins interaction with user by
-    * asking for number of players, taking player names and ages, and creating
-    * the Player objects that are needed to run the driver. Deals starting hand to
-    * each player as well.
-    *
-    * Begins actual graphics by creating the frame that the panels sits upon,
-    * and sets MouseListener functionality.
-    *
-    * */
+     * Constructor for the GUITest class. Begins interaction with user by
+     * asking for number of players, taking player names and ages, and creating
+     * the Player objects that are needed to run the driver. Deals starting hand to
+     * each player as well.
+     *
+     * Begins actual graphics by creating the frame that the panels sits upon,
+     * and sets MouseListener functionality.
+     *
+     * */
     public GUITest(){
 
-//       ask user to enter the number of players
-        int numPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players?"));
+        //       ask user to enter the number of players
+        boolean validPlayer = false;
+        int numPlayers = 0;
+        //loop until valid num of players is given
+        while (!validPlayer) {
+            try {
+                //if valid number is given, end loop, otherwise, repeat
+                numPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players?"));
+                if (numPlayers >= 1 && numPlayers <= 4) {
+                    validPlayer = true;
+                }
+                else {
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid number of players");
+                }
+            }
+            catch (NumberFormatException e) {
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Please enter a valid number of players");
+            }
+        }
         driver = new TTRDriver(numPlayers);
 
-
-//        creates as many Player objects as the user specified.
-//        FIX THIS: USER SHOULD ONLY BE ABLE TO ENTER 2-5 PLAYERS
+        boolean validAge = false;
+        int age = 0;
+        //loop until valid age is given
         for(int i = 1; i<=numPlayers; i++){
             String name = JOptionPane.showInputDialog("Enter player " + i + "'s name.");
-            int age = Integer.parseInt(JOptionPane.showInputDialog("Enter player " + i + "'s age."));
+            while (!validAge) {
+                //if age is invalid, retry and reset the boolean to false
+                try {
+                    age = Integer.parseInt(JOptionPane.showInputDialog("Enter player " + i + "'s age."));
+                    validAge = true;
+                }
+                catch (NumberFormatException e) {
+                    validAge = false;
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid age");
+                }
+            }
             driver.makePlayer(name, age);
+            validAge = false;
         }
-
 
         //deal initial transportation cards
         driver.dealInitialTransCards();
-
 
         /* sets size of window*/
         frame.setPreferredSize( new  Dimension(1000, 800));
@@ -93,36 +122,47 @@ public class GUITest extends JPanel implements MouseListener {
         /* adds functionality of mouse*/
         addMouseListener(this);
 
-
         //  Deals destination cards by offering the first two cards in the
         //  destination card array and allowing the user to choose between
         //  them (1,2, or both).
         for(Player p: driver.getPlayers()){
             ArrayList<DestinationCard> choices = driver.drawTwoDest();
-            String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
+            boolean validChoice = false;
+            String playerChoice = "";
+            //loops until user enters a valid choice
+            while (!validChoice) {
+                playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
                     choices.get(1) + " \n" +
                     "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
+                //if user entered valid choice, move on, otherwise, repeat
+                if (playerChoice.equals("both") || playerChoice.equals("1") || playerChoice.equals("2")) {
+                    validChoice = true;
+                }
+                else {
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid choice");
+                }
+            }
+            validChoice = false;
             driver.dealInitialDestCardsGUI(playerChoice, choices, p);
         }
 
         //  sets frame to exit on close
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
     }
 
     /*
-    * paint component method
-    * */
+     * paint component method
+     * */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
     }
 
     /*
-    * Creates panels by calling methods that create them, then adds them
-    * to the frame.
-    * */
+     * Creates panels by calling methods that create them, then adds them
+     * to the frame.
+     * */
     public void createAndShowGUI() {
 
         //  background panel
@@ -148,11 +188,11 @@ public class GUITest extends JPanel implements MouseListener {
         //  user would like to do on their turn
         startTurnButton.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                completeTurn();
-            }
-        });
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    completeTurn();
+                }
+            });
 
         //bottom panel
         bottom = bottomPanel();
@@ -174,49 +214,69 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Completes a players turn. User can draw transportation cards,
-    * destination cards, or claim a route.
-    * */
+     * Completes a players turn. User can draw transportation cards,
+     * destination cards, or claim a route.
+     * */
     public void completeTurn(){
         //  asks user what they would like to do on their turn
-        int turnChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "enter 1 to draw trans cards, 2 for dest, 3 to claim route"));
+        int turnChoice = 0;
+        boolean validChoice = false;
+        //loops until valid turn choice is made
+        while (!validChoice) {
+            //if player choice is 1, 2, 3 move on, else, repeat
+            try {
+                turnChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "enter 1 to draw trans cards, 2 for dest, 3 to claim route"));
+                if (turnChoice >= 1 && turnChoice <= 3) {
+                    validChoice = true;
+                }
+                else {
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid choice");
+                }
+            }
+            catch (NumberFormatException e) {
+                //validChoice = false;
+                //JOptionPane error = new JOptionPane("Error");
+                return;
+            }
+        }
 
         //handle drawing trans cards
         if(turnChoice == 1){
-            drawTrans();
-
+            turnOver = drawTrans();
         }
         //handle drawing dest cards
         else if(turnChoice ==2){
-
-            drawDest();
+            turnOver = drawDest();
         }
         //handle claiming routes
         else if(turnChoice ==3){
-            claimRoute();
+            turnOver = claimRoute();
         }
 
-        turnOver = true;
-
         //  set's the driver to the next player's turn
-        driver.nextPlayersTurn();
-        //  prints a message saying who's up next
-        Player p = driver.getPlayers().get(driver.getPlayerTurn());
-        JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+        if (turnOver) {
+            driver.nextPlayersTurn();
+            //  prints a message saying who's up next
+            Player p = driver.getPlayers().get(driver.getPlayerTurn());
+            JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+        }
+        else {
+            JOptionPane.showMessageDialog(frame, "Action failed, please try again");
+        }
 
         /*
-        * This is how I handled refreshing the panels. I don't think this is the best way
-        * to do it, but it's the only way I could figure out that works.
-        *
-        * Creates the 5 information panels again and places them on the frame.
-        * */
+         * This is how I handled refreshing the panels. I don't think this is the best way
+         * to do it, but it's the only way I could figure out that works.
+         *
+         * Creates the 5 information panels again and places them on the frame.
+         * */
         //background panel
         JPanel panel2 = new JPanel();
         panel2.setBackground(Color.white);
         panel2.setPreferredSize(new Dimension(1000, 800));
         //  this allows you to use the border layout with 5 regions
         panel2.setLayout(new BorderLayout());
-
 
         //center board panel
         game = boardPanel();
@@ -245,14 +305,13 @@ public class GUITest extends JPanel implements MouseListener {
         createAndShowGUI();
     }
 
-
     /*
-    * Helps the completeRoute method by figuring out which route a player would like to claim
-    * by taking in two location strings
-    *
-    * @param    2 Strings holding the name of the location on the map
-    * @return   Route object that is the route the player is referring to, or null if nonexistent.
-    * */
+     * Helps the completeRoute method by figuring out which route a player would like to claim
+     * by taking in two location strings
+     *
+     * @param    2 Strings holding the name of the location on the map
+     * @return   Route object that is the route the player is referring to, or null if nonexistent.
+     * */
     public Route findRoute(String loc1, String loc2){
         for(Route r: driver.getRoutes()){
             if(r.getLoc1().getName().equalsIgnoreCase(loc1) || r.getLoc1().getName().equalsIgnoreCase(loc2)){
@@ -264,41 +323,43 @@ public class GUITest extends JPanel implements MouseListener {
         return null;
     }
 
-    /*
-    * Called when the user chooses to claim a route. Asks which route they'd like to claim
-    * and checks if they're able to claim it. Awards the route if appropriate.
-    *
-    * */
-    public void claimRoute(){
+    public boolean claimRoute(){
         //  get the current Player object
         Player p = driver.getPlayers().get(driver.getPlayerTurn());
 
         //ask user to enter the endpoints of the route they'd like to claim
-        String location1 = JOptionPane.showInputDialog(frame, "Enter the first endpoint of the route you'd like to claim");
-        String location2 = JOptionPane.showInputDialog(frame, "Enter the second endpoint of the route you'd like to claim");
+        boolean isRoute = false;
+        Route desired = null;
+        while (!isRoute) {
+            String location1 = JOptionPane.showInputDialog(frame, "Enter the first endpoint of the route you'd like to claim");
+            String location2 = JOptionPane.showInputDialog(frame, "Enter the second endpoint of the route you'd like to claim");
 
-        //figure out which route they want
-        Route desired = findRoute(location1, location2);
+            //figure out which route they want
+            desired = findRoute(location1, location2);
 
-        //if they entered an invalid route, return without moving to the next player
-        if(desired == null){
-            JOptionPane.showMessageDialog(frame, "That's not a route!");
-            return;
+            //if they entered an invalid route, return without moving to the next player
+            if(desired == null){
+                JOptionPane.showMessageDialog(frame, "That's not a route!");
+                return false;
+            }
+            else {
+                isRoute = true;
+            }
         }
 
         //check if they have enough taxis to claim the route, return if necessary
         if(!driver.enoughTaxis(desired, p)){
             JOptionPane.showMessageDialog(frame, "You don't have enough taxis to claim this route!");
-            return;
+            return false;
         }
 
         /*
-        * If a player has enough taxis, they must state how they'd like to pay for the route.
-        * This is done by making a window pop up that contains text fields for each card
-        * color. The user enters the number of each color card they'd like to
-        * put toward the purchase. If they enter a valid selection of cards, they are given
-        * the route.
-        * */
+         * If a player has enough taxis, they must state how they'd like to pay for the route.
+         * This is done by making a window pop up that contains text fields for each card
+         * color. The user enters the number of each color card they'd like to
+         * put toward the purchase. If they enter a valid selection of cards, they are given
+         * the route.
+         * */
 
         //  text fields for each color card
         JTextField blueNum = new JTextField("0", 5);
@@ -333,17 +394,35 @@ public class GUITest extends JPanel implements MouseListener {
         enterPayment.add(new Label("rainbow:"));
         enterPayment.add(rainbowNum);
 
-        //  make dialogue box
-        JOptionPane.showMessageDialog(frame, enterPayment);
+        boolean validPayment = false;
+        int blue = 0;
+        int gray = 0;
+        int green = 0;
+        int orange = 0;
+        int pink = 0;
+        int red = 0;
+        int rainbow = 0;
+        //checks each payment input for an integer, if not it will ask again
+        while (!validPayment) {
+            //  make dialogue box
+            JOptionPane.showMessageDialog(frame, enterPayment);
 
-        //  get each of the numbers entered
-        int blue = Integer.parseInt(blueNum.getText());
-        int gray = Integer.parseInt(grayNum.getText());
-        int green = Integer.parseInt(greenNum.getText());
-        int orange = Integer.parseInt(orangeNum.getText());
-        int pink = Integer.parseInt(pinkNum.getText());
-        int red = Integer.parseInt(redNum.getText());
-        int rainbow = Integer.parseInt(rainbowNum.getText());
+            //  get each of the numbers entered
+            try {
+                blue = Integer.parseInt(blueNum.getText());
+                gray = Integer.parseInt(grayNum.getText());
+                green = Integer.parseInt(greenNum.getText());
+                orange = Integer.parseInt(orangeNum.getText());
+                pink = Integer.parseInt(pinkNum.getText());
+                red = Integer.parseInt(redNum.getText());
+                rainbow = Integer.parseInt(rainbowNum.getText());
+                validPayment = true;
+            }
+            catch (NumberFormatException e) {
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Error: Enter a number");
+            }
+        }
 
         //  check if the user can pay for the route with the offered cards
         //  if the user cannot pay, deny the transaction without moving on
@@ -355,9 +434,7 @@ public class GUITest extends JPanel implements MouseListener {
             //skip ahead
 
             //NEEDS FIXIN'
-            int playIndex = driver.getPlayers().indexOf(p);
-            System.out.println(playIndex);
-            driver.setPlayerTurn(playIndex);
+            return false;
         }
 
         //  NEEDS FIXING: currently prints that the user can claim the route
@@ -365,17 +442,17 @@ public class GUITest extends JPanel implements MouseListener {
         //  the player's possession
         else{
             JOptionPane.showMessageDialog(frame, "You can claim this route!");
+            return true;
         }
-
 
     }
 
     /*
-    * Checks if a Player can pay for a route with their offered amounts of cards. Called by claimRoute()
-    *
-    * @param    the Route they'd like to claim, int values for each color card (their offer)
-    * @return   true if the user's card offer can be used to pay for the route
-    * */
+     * Checks if a Player can pay for a route with their offered amounts of cards. Called by claimRoute()
+     *
+     * @param    the Route they'd like to claim, int values for each color card (their offer)
+     * @return   true if the user's card offer can be used to pay for the route
+     * */
     public boolean canPay(Route r, int blue, int gray, int green, int orange, int pink, int red, int rainbow){
         //  gets the requirement string from the Route object
         String[] recs = r.getRequirement().split(" ");
@@ -453,33 +530,68 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Called when the user chooses to draw a destination card. Offers two cards
-    * and allows the user to pick choice 1, 2, or both. Adds to their hand and
-    * discards unwanted cards (if any).
-    * */
-    public void drawDest(){
+     * Called when the user chooses to draw a destination card. Offers two cards
+     * and allows the user to pick choice 1, 2, or both. Adds to their hand and
+     * discards unwanted cards (if any).
+     * */
+    public boolean drawDest(){
         //  get current player
         Player p = driver.getPlayers().get(driver.getPlayerTurn());
         //  uses driver to draw two destination cards and saves in an array
         ArrayList<DestinationCard> choices = driver.drawTwoDest();
         //  asks the user to enter "1" to take the first card, "2" for the second, or "both"
-        String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
+        String playerChoice = "";
+        boolean validChoice = false;
+        //loops until 1, 2, both is given as input
+        while(!validChoice) {
+            playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
                 choices.get(1) + " \n" +
                 "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
+            if (playerChoice != null) {
+                if (playerChoice.equals("1") || playerChoice.equals("2") || playerChoice.equals("both")) {
+                    validChoice = true;
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Enter a valid choice");
+                }
+            }
+            else {
+                return false;
+            }
+        }
         //  deals the cards using the driver
         driver.dealInitialDestCardsGUI(playerChoice, choices, p);
+        return true;
     }
 
     /*
-    * Called when the user chooses to draw transportation cards. User can draw a
-    * face up card or a face down card. If the user picks a face up taxi card, their
-    * turn is over. They can't pick a face up taxi on their second choice. Adds the
-    * selected cards to their hand.
-    * */
-    public void drawTrans(){
+     * Called when the user chooses to draw transportation cards. User can draw a
+     * face up card or a face down card. If the user picks a face up taxi card, their
+     * turn is over. They can't pick a face up taxi on their second choice. Adds the
+     * selected cards to their hand.
+     * */
+    public boolean drawTrans(){
         //  gets user's decision for first card draw
-        String tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
-                "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
+        boolean validChoice = false;
+        String tCardChoice = "";
+        //loops until blind or face is given as input
+        while(!validChoice) {
+            tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
+                    "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
+            if (tCardChoice != null) {
+                tCardChoice = tCardChoice.toLowerCase();
+                if (tCardChoice.equals("face") || tCardChoice.equals("blind")) {
+                    validChoice = true;
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Enter a valid choice");
+                    //return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
 
         //  if the user wants a blind draw
         if(tCardChoice.equals("blind")){
@@ -498,7 +610,6 @@ public class GUITest extends JPanel implements MouseListener {
             panel2.setBackground(Color.white);
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
-
 
             //center board panel
             game = boardPanel();
@@ -526,7 +637,26 @@ public class GUITest extends JPanel implements MouseListener {
         //  face draw
         else if(tCardChoice.equals("face")){
             //  asks the user for a number (this is the card they want to pick up)
-            int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+            validChoice = false;
+            int faceChoice = 0;
+            //loops until 1, 2, 3, 4, 5 is given
+            while (!validChoice) {
+                try {
+                    faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+                    if (faceChoice >= 1 && faceChoice <= 5) {
+                        validChoice = true;
+                    }
+                    else {
+                        JOptionPane error = new JOptionPane("Error");
+                        error.showMessageDialog(null, "Enter a valid choice");
+                        //return false;
+                    }
+                }
+                catch (NumberFormatException e) {
+                    //JOptionPane.showMessageDialog(null, "Error: Enter a number");
+                    return false;
+                }
+            }
 
             //  get the card to add to the player's hand
             TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
@@ -555,7 +685,6 @@ public class GUITest extends JPanel implements MouseListener {
                 panel2.setPreferredSize(new Dimension(1000, 800));
                 panel2.setLayout(new BorderLayout());
 
-
                 //center board panel
                 game = boardPanel();
                 //left side panel
@@ -577,20 +706,19 @@ public class GUITest extends JPanel implements MouseListener {
                 frame.getContentPane().add(panel2);
                 frame.validate();
                 //createAndShowGUI();
-                return;
+                return true;
             }
 
             /*
-            * Here's that block of code again. I'm sure there's a better way to
-            * do this, but when I put it in it's own method it stopped working.
-            * */
+             * Here's that block of code again. I'm sure there's a better way to
+             * do this, but when I put it in it's own method it stopped working.
+             * */
             //repaint everything
             //background panel
             JPanel panel2 = new JPanel();
             panel2.setBackground(Color.white);
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
-
 
             //center board panel
             game = boardPanel();
@@ -613,12 +741,20 @@ public class GUITest extends JPanel implements MouseListener {
             frame.getContentPane().add(panel2);
             frame.validate();
 
-
         }
-
         //  repeat the process for the second card
-        tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
-                "Enter \"face\" to draw a face card. You may not draw a rainbow taxi card."));
+        validChoice = false;
+        while(!validChoice) {
+            tCardChoice = (JOptionPane.showInputDialog(frame, "Enter \"blind\" to draw from the top of the transportation deck" +
+                    "Enter \"face\" to draw a face card. You may only draw once if you take a taxi card."));
+            tCardChoice = tCardChoice.toLowerCase();
+            if (tCardChoice.equals("face") || tCardChoice.equals("blind")) {
+                validChoice = true;
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Enter a valid choice");
+            }
+        }
 
         //  process for blind card (could be put in it's own method)
         if(tCardChoice.equals("blind")){
@@ -633,7 +769,6 @@ public class GUITest extends JPanel implements MouseListener {
             panel2.setBackground(Color.white);
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
-
 
             //center board panel
             game = boardPanel();
@@ -660,7 +795,24 @@ public class GUITest extends JPanel implements MouseListener {
 
         //   second face draw
         else if(tCardChoice.equals("face")){
-            int faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+            //loops until 1, 2, 3, 4, 5 is given
+            int faceChoice = 0;
+            validChoice = false;
+            while (!validChoice) {
+                try {
+                    faceChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter 1,2,3,4, or 5 to draw that face up card."));
+                    if (faceChoice >= 1 && faceChoice <= 5) {
+                        validChoice = true;
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Enter a valid choice");
+                    }
+                }
+                catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Error: Enter a number");
+                    //return false;
+                }
+            }
             //add choice to player hand and remove from display, replacing with top card on deck
             TransportationCard t = driver.getDisplayTransCards().get(faceChoice-1);
             driver.getPlayers().get(driver.getPlayerTurn()).addToTransHand(t);
@@ -676,8 +828,8 @@ public class GUITest extends JPanel implements MouseListener {
 
             //if player chose a taxi, return
             /*
-            * NEEDS FIXING: (i think) so that the player can choose again if they pick rainbow on the second draw
-            * */
+             * NEEDS FIXING: (i think) so that the player can choose again if they pick rainbow on the second draw
+             * */
             if(t.getColor().equals("RAINBOW")){
 
                 //background panel
@@ -685,7 +837,6 @@ public class GUITest extends JPanel implements MouseListener {
                 panel2.setBackground(Color.white);
                 panel2.setPreferredSize(new Dimension(1000, 800));
                 panel2.setLayout(new BorderLayout());
-
 
                 //center board panel
                 game = boardPanel();
@@ -717,7 +868,6 @@ public class GUITest extends JPanel implements MouseListener {
             panel2.setPreferredSize(new Dimension(1000, 800));
             panel2.setLayout(new BorderLayout());
 
-
             //center board panel
             game = boardPanel();
             //left side panel
@@ -739,16 +889,15 @@ public class GUITest extends JPanel implements MouseListener {
             frame.getContentPane().add(panel2);
             frame.validate();
             //createAndShowGUI();
-            return;
         }
+        return true;
     }
 
-
     /*
-    * Creates the right panel
-    *
-    * @return   a Panel that holds the transportation cards and their labels, as well as the blind draw pile
-    * */
+     * Creates the right panel
+     *
+     * @return   a Panel that holds the transportation cards and their labels, as well as the blind draw pile
+     * */
     public JPanel rightPanel(){
         // base panel
         JPanel p = new JPanel();
@@ -807,7 +956,7 @@ public class GUITest extends JPanel implements MouseListener {
         JLabel picLabel5 = new JLabel(new ImageIcon(tCard5));
 
         //  label with ImageIcon on it
-        Image blindPile = toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdpieces/transportation_back.jpg");
+        Image blindPile = toolkit.getImage("fwdpieces/transportation_back.jpg");
         blindPile = blindPile.getScaledInstance(200,125, 0);
         JLabel blindPileLabel = new JLabel(new ImageIcon(blindPile));
 
@@ -828,10 +977,10 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Creates the bottom panel (used only for "Ticket to Ride" label currently)
-    *
-    * @return   a Panel with a label
-    * */
+     * Creates the bottom panel (used only for "Ticket to Ride" label currently)
+     *
+     * @return   a Panel with a label
+     * */
     public JPanel bottomPanel(){
         //  make panel
         JPanel p = new JPanel();
@@ -852,10 +1001,10 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Creates top panel. Holds text label contianing who' turn it is. Button is added in createAndShowGUi()
-    *
-    * @return Panel with label
-    * */
+     * Creates top panel. Holds text label contianing who' turn it is. Button is added in createAndShowGUi()
+     *
+     * @return Panel with label
+     * */
     public JPanel topPanel(){
         JPanel p = new JPanel();
         p.setSize(new Dimension(1000, 100));
@@ -866,21 +1015,18 @@ public class GUITest extends JPanel implements MouseListener {
         panel.add(jLabel, BorderLayout.WEST);
         panel.setBorder(new LineBorder(Color.BLACK));
 
-
-
         p.add(panel);
         return p;
     }
 
-
     /*
-    * Creates left side panel for player info:
-    *   1)  transportation hand
-    *   2)  taxis
-    *   3)  button to see destination hand
-    *   4)  picture of destination card deck (fae down pile)
-    *
-    * */
+     * Creates left side panel for player info:
+     *   1)  transportation hand
+     *   2)  taxis
+     *   3)  button to see destination hand
+     *   4)  picture of destination card deck (fae down pile)
+     *
+     * */
     public JPanel leftPanel(){
         //  main panel
         JPanel p = new JPanel();
@@ -966,7 +1112,7 @@ public class GUITest extends JPanel implements MouseListener {
         rainbowLabel.setFont(new Font("Calibri",1, 15));
 
         //  label with ImageIcon for dest draw pile
-        Image destDraw = toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/destination_card_back.jpg");
+        Image destDraw = toolkit.getImage("fwdboardandtransport/destination_card_back.jpg");
         destDraw = destDraw.getScaledInstance(200,100, 0);
         JLabel destDrawPile = new JLabel(new ImageIcon(destDraw));
 
@@ -990,18 +1136,29 @@ public class GUITest extends JPanel implements MouseListener {
         //  action listener for destination card button
         seeDestButton.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
 
-                //  creates a pop up window listing which destination cards the player has
-                String message = "You have these cards:";
-                for(DestinationCard d: driver.getPlayers().get(driver.getPlayerTurn()).getDestHand()){
-                    message = message + " " + d.toString();
+                    //  creates a pop up window listing which destination cards the player has
+                    Image[] handDraw = new Image[18];
+                    int count = 0;
+                    //make scrolling panel with images of destination cards on it
+                    JPanel handPanel = new JPanel();
+                    handPanel.setSize(new Dimension(200, 150));
+                    handPanel.setLayout(new GridLayout(3, 6));
+                    //get each destination card the player has
+                    for (DestinationCard d: driver.getPlayers().get(driver.getPlayerTurn()).getDestHand()){
+                        handDraw[count] = d.getPicture();
+                        handDraw[count] = handDraw[count].getScaledInstance(200,150, 0);
+                        JLabel picLabel = new JLabel(new ImageIcon(handDraw[count]));
+                        handPanel.add(picLabel);
+                    }
+                    // add to the scrolling panel the panel with the images
+                    JScrollPane scroll = new JScrollPane(handPanel);
+                    //show panel
+                    JOptionPane.showMessageDialog(frame, scroll, "These are your destination cards", JOptionPane.INFORMATION_MESSAGE);
                 }
-                JOptionPane.showMessageDialog(frame, message);
-            }
-        });
-
+            });
 
         //  label for tourist attractions
         //  NEEDS FIXING: maybe make another button and pop up like above
@@ -1009,7 +1166,6 @@ public class GUITest extends JPanel implements MouseListener {
         touristLabel.setFont(new Font("Calibri",1, 15));
         scorePanel.add(touristLabel);
         scorePanel.setBorder(new LineBorder(Color.BLACK));
-
 
         //  add panels to top panel
         transCardHandPanel.add(nameLabel);
@@ -1039,14 +1195,11 @@ public class GUITest extends JPanel implements MouseListener {
         return p;
     }
 
-
-
-
     /*
-    * Creates center panel. Contains a scaled image of the board.
-    *
-    * @return panel with board image on it
-    * */
+     * Creates center panel. Contains a scaled image of the board.
+     *
+     * @return panel with board image on it
+     * */
     public  JPanel boardPanel(){
 
         JPanel p = new JPanel();
@@ -1057,10 +1210,10 @@ public class GUITest extends JPanel implements MouseListener {
 
         //  add the board image to the panel
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image boardImage = toolkit.getImage("C:/Users/patri/Documents/eileen/ttrrestored/src/fwdboardandtransport/game_board.jpg");
+        Image boardImage = toolkit.getImage("fwdboardandtransport/game_board.jpg");
 
         //  scales image
-        boardImage = boardImage.getScaledInstance(650,700, 0);
+        boardImage = boardImage.getScaledInstance(625,675, 0);
         JLabel picLabel = new JLabel(new ImageIcon(boardImage));
         panel.add(picLabel);
         panel.repaint();
@@ -1127,10 +1280,10 @@ public class GUITest extends JPanel implements MouseListener {
         GUITest t = new GUITest();
         /* Schedule a job for the event-dispatching thread: creating and showing this application's GUI. Unsupported feature in Stride : anonymous class*/
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                t.createAndShowGUI();
-            }
-        });
+                public void run() {
+                    t.createAndShowGUI();
+                }
+            });
     }
 
 }
