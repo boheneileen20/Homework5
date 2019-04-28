@@ -224,12 +224,32 @@ public class GUITest extends JPanel implements MouseListener {
     }
 
     /*
-    * Completes a players turn. User can draw transportation cards,
-    * destination cards, or claim a route.
-    * */
+     * Completes a players turn. User can draw transportation cards,
+     * destination cards, or claim a route.
+     * */
     public void completeTurn(){
         //  asks user what they would like to do on their turn
-        int turnChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "enter 1 to draw trans cards, 2 for dest, 3 to claim route"));
+        int turnChoice = 0;
+        boolean validChoice = false;
+        //loops until valid turn choice is made
+        while (!validChoice) {
+            //if player choice is 1, 2, 3 move on, else, repeat
+            try {
+                turnChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "enter 1 to draw trans cards, 2 for dest, 3 to claim route"));
+                if (turnChoice >= 1 && turnChoice <= 3) {
+                    validChoice = true;
+                }
+                else {
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid choice");
+                }
+            }
+            catch (NumberFormatException e) {
+                validChoice = false;
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Please enter a valid choice");
+            }
+        }
 
         //handle drawing trans cards
         if(turnChoice == 1){
@@ -255,18 +275,17 @@ public class GUITest extends JPanel implements MouseListener {
         JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
 
         /*
-        * This is how I handled refreshing the panels. I don't think this is the best way
-        * to do it, but it's the only way I could figure out that works.
-        *
-        * Creates the 5 information panels again and places them on the frame.
-        * */
+         * This is how I handled refreshing the panels. I don't think this is the best way
+         * to do it, but it's the only way I could figure out that works.
+         *
+         * Creates the 5 information panels again and places them on the frame.
+         * */
         //background panel
         JPanel panel2 = new JPanel();
         panel2.setBackground(Color.white);
         panel2.setPreferredSize(new Dimension(1000, 800));
         //  this allows you to use the border layout with 5 regions
         panel2.setLayout(new BorderLayout());
-
 
         //center board panel
         game = boardPanel();
