@@ -413,17 +413,35 @@ public class GUITest extends JPanel implements MouseListener {
         enterPayment.add(new Label("rainbow:"));
         enterPayment.add(rainbowNum);
 
-        //  make dialogue box
-        JOptionPane.showMessageDialog(frame, enterPayment);
+        boolean validPayment = false;
+        int blue = 0;
+        int gray = 0;
+        int green = 0;
+        int orange = 0;
+        int pink = 0;
+        int red = 0;
+        int rainbow = 0;
+        //checks each payment input for an integer, if not it will ask again
+        while (!validPayment) {
+            //  make dialogue box
+            JOptionPane.showMessageDialog(frame, enterPayment);
 
-        //  get each of the numbers entered
-        int blue = Integer.parseInt(blueNum.getText());
-        int gray = Integer.parseInt(grayNum.getText());
-        int green = Integer.parseInt(greenNum.getText());
-        int orange = Integer.parseInt(orangeNum.getText());
-        int pink = Integer.parseInt(pinkNum.getText());
-        int red = Integer.parseInt(redNum.getText());
-        int rainbow = Integer.parseInt(rainbowNum.getText());
+            //  get each of the numbers entered
+            try {
+                blue = Integer.parseInt(blueNum.getText());
+                gray = Integer.parseInt(grayNum.getText());
+                green = Integer.parseInt(greenNum.getText());
+                orange = Integer.parseInt(orangeNum.getText());
+                pink = Integer.parseInt(pinkNum.getText());
+                red = Integer.parseInt(redNum.getText());
+                rainbow = Integer.parseInt(rainbowNum.getText());
+                validPayment = true;
+            }
+            catch (NumberFormatException e) {
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Error: Enter a number");
+            }
+        }
 
         //  check if the user can pay for the route with the offered cards
         //  if the user cannot pay, deny the transaction without moving on
