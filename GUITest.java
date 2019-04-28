@@ -66,25 +66,64 @@ public class GUITest extends JPanel implements MouseListener {
     * and sets MouseListener functionality.
     *
     * */
+    /*
+     * Constructor for the GUITest class. Begins interaction with user by
+     * asking for number of players, taking player names and ages, and creating
+     * the Player objects that are needed to run the driver. Deals starting hand to
+     * each player as well.
+     *
+     * Begins actual graphics by creating the frame that the panels sits upon,
+     * and sets MouseListener functionality.
+     *
+     * */
     public GUITest(){
 
-//       ask user to enter the number of players
-        int numPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players?"));
+        //       ask user to enter the number of players
+        boolean validPlayer = false;
+        int numPlayers = 0;
+        //loop until valid num of players is given
+        while (!validPlayer) {
+            try {
+                //if valid number is given, end loop, otherwise, repeat
+                numPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players?"));
+                if (numPlayers >= 1 && numPlayers <= 4) {
+                    validPlayer = true;
+                }
+                else {
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid number of players");
+                }
+            }
+            catch (NumberFormatException e) {
+                JOptionPane error = new JOptionPane("Error");
+                error.showMessageDialog(null, "Please enter a valid number of players");
+            }
+        }
         driver = new TTRDriver(numPlayers);
 
-
-//        creates as many Player objects as the user specified.
-//        FIX THIS: USER SHOULD ONLY BE ABLE TO ENTER 2-5 PLAYERS
+        boolean validAge = false;
+        int age = 0;
+        //loop until valid age is given
         for(int i = 1; i<=numPlayers; i++){
             String name = JOptionPane.showInputDialog("Enter player " + i + "'s name.");
-            int age = Integer.parseInt(JOptionPane.showInputDialog("Enter player " + i + "'s age."));
+            while (!validAge) {
+                //if age is invalid, retry and reset the boolean to false
+                try {
+                    age = Integer.parseInt(JOptionPane.showInputDialog("Enter player " + i + "'s age."));
+                    validAge = true;
+                }
+                catch (NumberFormatException e) {
+                    validAge = false;
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid age");
+                }
+            }
             driver.makePlayer(name, age);
+            validAge = false;
         }
-
 
         //deal initial transportation cards
         driver.dealInitialTransCards();
-
 
         /* sets size of window*/
         frame.setPreferredSize( new  Dimension(1000, 800));
@@ -93,22 +132,33 @@ public class GUITest extends JPanel implements MouseListener {
         /* adds functionality of mouse*/
         addMouseListener(this);
 
-
         //  Deals destination cards by offering the first two cards in the
         //  destination card array and allowing the user to choose between
         //  them (1,2, or both).
         for(Player p: driver.getPlayers()){
             ArrayList<DestinationCard> choices = driver.drawTwoDest();
-            String playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
+            boolean validChoice = false;
+            String playerChoice = "";
+            //loops until user enters a valid choice
+            while (!validChoice) {
+                playerChoice = JOptionPane.showInputDialog(p.getName() + ", you have drawn these cards: "+ choices.get(0).toString() + " and " +
                     choices.get(1) + " \n" +
                     "Enter \"both\" to take both, \"1\" for the first card, and \"2\" for the second");
+                //if user entered valid choice, move on, otherwise, repeat
+                if (playerChoice.equals("both") || playerChoice.equals("1") || playerChoice.equals("2")) {
+                    validChoice = true;
+                }
+                else {
+                    JOptionPane error = new JOptionPane("Error");
+                    error.showMessageDialog(null, "Please enter a valid choice");
+                }
+            }
+            validChoice = false;
             driver.dealInitialDestCardsGUI(playerChoice, choices, p);
         }
 
         //  sets frame to exit on close
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
     }
 
     /*
