@@ -105,59 +105,7 @@ public class GUITest extends JPanel implements MouseListener {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                //startTurn = true;
-                int turnChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "enter 1 to draw trans cards, 2 for dest, 3 to claim route"));
-
-                //handle drawing trans cards
-                if(turnChoice == 1){
-                   drawTrans();
-
-                }
-                //handle drawing dest cards
-                else if(turnChoice ==2){
-
-                    drawDest();
-                }
-                //handle claiming routes
-                else if(turnChoice ==3){
-                    
-                }
-
-
-                turnOver = true;
-
-                driver.nextPlayersTurn();
-                Player p = driver.getPlayers().get(driver.getPlayerTurn());
-                JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
-
-                //background panel
-                JPanel panel2 = new JPanel();
-                panel2.setBackground(Color.white);
-                panel2.setPreferredSize(new Dimension(1000, 800));
-                panel2.setLayout(new BorderLayout());
-
-
-                //center board panel
-                game = boardPanel();
-                //left side panel
-                left = leftPanel();
-
-                //top panel
-                top = topPanel();
-                //bottom panel
-                bottom = bottomPanel();
-                //right panel
-                right = rightPanel();
-
-                panel2.add(game, BorderLayout.CENTER);
-                panel2.add(right, BorderLayout.EAST);
-                panel2.add(bottom, BorderLayout.SOUTH);
-                panel2.add(top, BorderLayout.NORTH);
-                panel2.add(left, BorderLayout.WEST);
-
-                frame.getContentPane().add(panel2);
-                frame.validate();
-                createAndShowGUI();
+                completeTurn();
             }
         });
         //bottom panel
@@ -177,7 +125,125 @@ public class GUITest extends JPanel implements MouseListener {
 
     }
 
+    public void completeTurn(){
+        //startTurn = true;
+        int turnChoice = Integer.parseInt(JOptionPane.showInputDialog(frame, "enter 1 to draw trans cards, 2 for dest, 3 to claim route"));
 
+        //handle drawing trans cards
+        if(turnChoice == 1){
+            drawTrans();
+
+        }
+        //handle drawing dest cards
+        else if(turnChoice ==2){
+
+            drawDest();
+        }
+        //handle claiming routes
+        else if(turnChoice ==3){
+            claimRoute();
+        }
+
+
+        turnOver = true;
+
+        driver.nextPlayersTurn();
+        Player p = driver.getPlayers().get(driver.getPlayerTurn());
+        JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+
+        //background panel
+        JPanel panel2 = new JPanel();
+        panel2.setBackground(Color.white);
+        panel2.setPreferredSize(new Dimension(1000, 800));
+        panel2.setLayout(new BorderLayout());
+
+
+        //center board panel
+        game = boardPanel();
+        //left side panel
+        left = leftPanel();
+
+        //top panel
+        top = topPanel();
+        //bottom panel
+        bottom = bottomPanel();
+        //right panel
+        right = rightPanel();
+
+        panel2.add(game, BorderLayout.CENTER);
+        panel2.add(right, BorderLayout.EAST);
+        panel2.add(bottom, BorderLayout.SOUTH);
+        panel2.add(top, BorderLayout.NORTH);
+        panel2.add(left, BorderLayout.WEST);
+
+        frame.getContentPane().add(panel2);
+        frame.validate();
+        createAndShowGUI();
+    }
+
+
+    public Route findRoute(String loc1, String loc2){
+        for(Route r: driver.getRoutes()){
+            if(r.getLoc1().getName().equalsIgnoreCase(loc1) || r.getLoc1().getName().equalsIgnoreCase(loc2)){
+                if(r.getLoc2().getName().equalsIgnoreCase(loc1) || r.getLoc2().getName().equalsIgnoreCase(loc2)){
+                    return r;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void claimRoute(){
+        Player p = driver.getPlayers().get(driver.getPlayerTurn());
+        //ask user to enter the endpoints of the route they'd like to claim
+        String location1 = JOptionPane.showInputDialog(frame, "Enter the first endpoint of the route you'd like to claim");
+        String location2 = JOptionPane.showInputDialog(frame, "Enter the second endpoint of the route you'd like to claim");
+        //figure out which route they want
+        Route desired = findRoute(location1, location2);
+        //if they entered an invalid route
+        if(desired == null){
+            JOptionPane.showMessageDialog(frame, "That's not a route!");
+            return;
+        }
+        //check if they have enough taxis to claim the route
+        if(!driver.enoughTaxis(desired, p)){
+            JOptionPane.showMessageDialog(frame, "You don't have enough taxis to claim this route!");
+            return;
+        }
+        //if they have enough taxis, ask how they'd like to pay for route
+        JTextField blueNum = new JTextField(5);
+        JTextField grayNum = new JTextField(5);
+        JTextField greenNum = new JTextField(5);
+        JTextField orangeNum = new JTextField(5);
+        JTextField pinkNum = new JTextField(5);
+        JTextField redNum = new JTextField(5);
+        JTextField rainbowNum = new JTextField(5);
+
+        JPanel enterPayment = new JPanel();
+
+        enterPayment.add(new Label("blue:"));
+        enterPayment.add(blueNum);
+
+        enterPayment.add(new Label("gray:"));
+        enterPayment.add(grayNum);
+
+        enterPayment.add(new Label("green:"));
+        enterPayment.add(greenNum);
+
+        enterPayment.add(new Label("orange:"));
+        enterPayment.add(orangeNum);
+
+        enterPayment.add(new Label("pink:"));
+        enterPayment.add(pinkNum);
+
+        enterPayment.add(new Label("red:"));
+        enterPayment.add(redNum);
+        enterPayment.add(new Label("rainbow:"));
+        enterPayment.add(rainbowNum);
+
+
+        JOptionPane.showMessageDialog(frame, enterPayment);
+    }
     public void drawDest(){
         Player p = driver.getPlayers().get(driver.getPlayerTurn());
         ArrayList<DestinationCard> choices = driver.drawTwoDest();
@@ -244,9 +310,7 @@ public class GUITest extends JPanel implements MouseListener {
 
             //if player chose a taxi, return
             if(t.getColor().equals("RAINBOW")){
-                driver.nextPlayersTurn();
-                Player p = driver.getPlayers().get(driver.getPlayerTurn());
-                JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+                //driver.nextPlayersTurn();
 
                 //background panel
                 JPanel panel2 = new JPanel();
@@ -275,6 +339,7 @@ public class GUITest extends JPanel implements MouseListener {
 
                 frame.getContentPane().add(panel2);
                 frame.validate();
+                //createAndShowGUI();
                 return;
             }
 
@@ -306,7 +371,6 @@ public class GUITest extends JPanel implements MouseListener {
 
             frame.getContentPane().add(panel2);
             frame.validate();
-            createAndShowGUI();
 
 
         }
@@ -370,9 +434,9 @@ public class GUITest extends JPanel implements MouseListener {
 
             //if player chose a taxi, return
             if(t.getColor().equals("RAINBOW")){
-                driver.nextPlayersTurn();
-                Player p = driver.getPlayers().get(driver.getPlayerTurn());
-                JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
+//                driver.nextPlayersTurn();
+//                Player p = driver.getPlayers().get(driver.getPlayerTurn());
+//                JOptionPane.showMessageDialog(frame, p.getName() + " is up next");
 
                 //background panel
                 JPanel panel2 = new JPanel();
@@ -401,7 +465,7 @@ public class GUITest extends JPanel implements MouseListener {
 
                 frame.getContentPane().add(panel2);
                 frame.validate();
-                createAndShowGUI();
+                //createAndShowGUI();
             }
 
             //repaint everything
@@ -432,7 +496,8 @@ public class GUITest extends JPanel implements MouseListener {
 
             frame.getContentPane().add(panel2);
             frame.validate();
-            createAndShowGUI();
+            //createAndShowGUI();
+            return;
         }
     }
 
