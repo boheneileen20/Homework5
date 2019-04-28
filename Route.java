@@ -38,7 +38,7 @@ public class Route
     /**
      * Returns the requirements for this route.
      * 
-     * @return String representing the requirements
+     * @return String representing the requirements.
      * 
      */
     public String getRequirement(){
