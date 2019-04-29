@@ -8,21 +8,25 @@ import java.util.ArrayList;
  */
 public class Route
 {
-    //location 1
+    /**
+     * The First Location.
+     */
     Location loc1;
-    //location 2
+    /**
+     * The Second Location.
+     */
     Location loc2;
-
-    //each string is formatted as "color number"
-    //for example, if four pink cards are needed, 
-    //the entry is "pink 4"
+    /**
+     * Info about route is formatted as "color number".
+     */
     String requirement;
     
     /**
-     * Constructor for Route objects, initializes instance variables
+     * Constructor for Route objects, initializes instance variables.
      * 
-     * @param the two locations, their x and y coordinates, and a requirements arraylist of strings representing
-     * the cards needed to claim the route.
+     * @param loc1 First location.
+     * @param loc2 Second location.
+     * @param requirement The color and number of the card.
      */
     public Route(Location loc1, Location loc2, String requirement){
         this.loc1 = loc1;
@@ -32,23 +36,39 @@ public class Route
     
 
     /**
-     * Returns the requirements ArrayList for this route
+     * Returns the requirements ArrayList for this route.
      * 
-     * @return String representing the requirements
-     * Strings have the format "color number" such as "pink 4" if four pink cards are needed
+     * @return String representing the card in theformat "color number".
      */
     public String getRequirement(){
         return requirement;
     }
     
+    /**
+     * Returns the locations, color, and number of the card.
+     * 
+     * @return String representing the card info.
+     */
     public String toString(){
-        String result = loc1.getName() + " to " + loc2.getName() + " for " + requirement;
+        String result = loc1.getName() + " to " + loc2.getName();
+        result += " for " + requirement;
         return result;
     }
+    
+    /**
+     * Returns the first location of the card.
+     * 
+     * @return First location.
+     */
     public Location getLoc1(){
         return loc1;
     }
 
+    /**
+     * Returns the second location of the card.
+     * 
+     * @return Second location.
+     */
     public Location getLoc2(){
         return loc2;
     }
